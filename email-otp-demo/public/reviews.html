@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Reviews — Flavour Food Bites</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<style>
+:root {
+  --primary:#FF6B35;
+  --secondary:#2C3E50;
+  --bg:#0F0F23;
+  --bg-light:#1a1a3a;
+  --text:#fff;
+  --text-secondary:#B8BCC8;
+  --glass:rgba(255,255,255,0.1);
+  --glass-border:rgba(255,255,255,0.2);
+  --gradient-primary:linear-gradient(135deg,#FF6B35 0%,#E55A2B 50%,#FF8A50 100%);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
+
+/* Navbar */
+header{position:fixed;top:0;left:0;right:0;background:rgba(15,15,35,0.9);
+  backdrop-filter:blur(20px);border-bottom:1px solid var(--glass-border);z-index:1000;}
+.navbar{display:flex;justify-content:space-between;align-items:center;
+  padding:1rem 2rem;max-width:1400px;margin:0 auto;}
+.logo-section{display:flex;align-items:center;gap:1rem;}
+.logo{width:60px;height:60px;background:var(--gradient-primary);border-radius:16px;
+  display:flex;justify-content:center;align-items:center;color:#fff;font-size:1.8rem;font-weight:bold;
+  box-shadow:0 0 40px rgba(255,107,53,0.3);}
+.brand-name{font-size:1.8rem;font-weight:800;background:var(--gradient-primary);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-links{display:flex;list-style:none;gap:2rem;}
+.nav-links a{text-decoration:none;color:var(--text-secondary);
+  font-weight:600;padding:0.75rem 1.5rem;border-radius:12px;transition:0.3s;}
+.nav-links a:hover,.nav-links a.active{color:var(--text);transform:translateY(-2px);}
+
+/* Reviews Container */
+.reviews-container{max-width:1100px;margin:120px auto 60px;padding:3rem 2rem;
+  background:var(--glass);border:1px solid var(--glass-border);border-radius:24px;backdrop-filter:blur(20px);}
+.reviews-container h1{text-align:center;font-size:clamp(2.2rem,5vw,3.5rem);font-weight:900;
+  background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:2rem;}
+
+/* Stats */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;margin-bottom:2rem;}
+.stat-card{background:var(--bg-light);border:1px solid var(--glass-border);border-radius:16px;
+  text-align:center;padding:1.5rem;box-shadow:0 0 20px rgba(255,107,53,0.15);}
+.stat-card h2{font-size:2.5rem;color:var(--primary);}
+.stat-card p{color:var(--text-secondary);margin-top:0.5rem;font-weight:600;}
+
+/* Reviews List */
+.review-list{margin-top:2rem;}
+.review-item{background:var(--bg-light);border:1px solid var(--glass-border);
+  border-radius:16px;padding:1rem 1.5rem;margin-bottom:1rem;}
+.review-item .stars i{color:var(--primary);}
+.review-item .reviewer{font-weight:700;margin-top:0.5rem;color:var(--text);}
+.review-item .comment{color:var(--text-secondary);margin-top:0.3rem;}
+
+/* Empty message */
+.empty-message{text-align:center;color:var(--text-secondary);font-size:1.2rem;margin-top:3rem;
+  border:1px dashed var(--glass-border);padding:2rem;border-radius:16px;}
+
+/* Add Review Button */
+.add-review-btn{position:fixed;bottom:30px;right:30px;background:var(--gradient-primary);color:#fff;
+  border:none;border-radius:50%;width:60px;height:60px;display:flex;justify-content:center;align-items:center;
+  font-size:1.5rem;cursor:pointer;box-shadow:0 0 30px rgba(255,107,53,0.3);transition:transform 0.2s, box-shadow 0.3s;}
+.add-review-btn:hover{transform:scale(1.1);box-shadow:0 0 40px rgba(255,107,53,0.5);}
+
+/* Modal */
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);
+  justify-content:center;align-items:center;z-index:2000;}
+.modal-content{background:var(--bg-light);padding:2rem;border-radius:16px;border:1px solid var(--glass-border);
+  width:90%;max-width:400px;text-align:center;}
+.modal-content h2{color:var(--primary);margin-bottom:1rem;}
+.modal-content input,.modal-content textarea{width:100%;margin:0.5rem 0;padding:0.75rem;border-radius:8px;
+  border:1px solid var(--glass-border);background:var(--glass);color:var(--text);}
+.modal-content button{margin-top:1rem;padding:0.75rem 1.5rem;border:none;border-radius:8px;cursor:pointer;
+  background:var(--gradient-primary);color:#fff;font-weight:600;}
+.modal-content button:hover{opacity:0.9;}
+.star-rating i{font-size:1.5rem;color:#555;cursor:pointer;transition:color 0.2s;}
+.star-rating i.active{color:var(--primary);}
+.close-btn{position:absolute;top:20px;right:25px;color:#fff;font-size:1.5rem;cursor:pointer;}
+
+/* Footer */
+footer{text-align:center;padding:2rem;color:var(--text-secondary);font-size:0.95rem;
+  border-top:1px solid var(--glass-border);background:rgba(15,15,35,0.9);}
+footer a{color:var(--primary);text-decoration:none;font-weight:600;}
+</style>
+</head>
+
+<body>
+<header>
+  <nav class="navbar">
+    <div class="logo-section">
+      <div class="logo"><i class="fas fa-utensils"></i></div>
+      <span class="brand-name">Flavour Food Bites</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="lcart.html">Cart</a></li>
+      <li><a href="orders.html">Orders</a></li>
+      <li><a href="reviews.html" class="active">Reviews</a></li>
+      <li><a href="aboutus.html">About Us</a></li>
+      <li><a href="customerService.html">Customer Service</a></li>
+      <li><a href="login.html">Logout</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <section class="reviews-container">
+    <h1>Customer Reviews</h1>
+    <div class="stats-grid">
+      <div class="stat-card"><h2 id="avgRating">0.0</h2><p>Average Rating</p></div>
+      <div class="stat-card"><h2 id="totalReviews">0</h2><p>Total Reviews</p></div>
+      <div class="stat-card"><h2 id="satisfaction">0%</h2><p>Satisfaction Rate</p></div>
+      <div class="stat-card"><h2 id="happyCustomers">0</h2><p>Happy Customers</p></div>
+    </div>
+
+    <div id="reviewList" class="review-list"></div>
+    <div id="emptyMessage" class="empty-message">
+      No customer reviews yet.<br>
+      Be the first to share your thoughts about our <strong>burgers, snacks,</strong> or <strong>beverages</strong>!
+    </div>
+  </section>
+</main>
+
+<button class="add-review-btn" id="openModal"><i class="fas fa-pen"></i></button>
+
+<!-- Modal for Feedback -->
+<div class="modal" id="reviewModal">
+  <div class="modal-content">
+    <span class="close-btn" id="closeModal">&times;</span>
+    <h2>Write a Review</h2>
+    <input type="text" id="reviewerName" placeholder="Your Name (optional)">
+    <div class="star-rating" id="starRating">
+      <i class="fa-solid fa-star" data-value="1"></i>
+      <i class="fa-solid fa-star" data-value="2"></i>
+      <i class="fa-solid fa-star" data-value="3"></i>
+      <i class="fa-solid fa-star" data-value="4"></i>
+      <i class="fa-solid fa-star" data-value="5"></i>
+    </div>
+    <textarea id="reviewText" rows="4" placeholder="Write your feedback..."></textarea>
+    <button id="submitReview">Submit</button>
+  </div>
+</div>
+
+<footer>
+  &copy; 2025 Flavour Food Bites. All rights reserved. <br>
+  Designed with ❤️ for burger, snack, and beverage lovers.
+</footer>
+
+<script>
+const openModal=document.getElementById("openModal");
+const closeModal=document.getElementById("closeModal");
+const modal=document.getElementById("reviewModal");
+const starEls=document.querySelectorAll("#starRating i");
+let selectedRating=0;
+const reviewList=document.getElementById("reviewList");
+const emptyMsg=document.getElementById("emptyMessage");
+
+openModal.onclick=()=>modal.style.display="flex";
+closeModal.onclick=()=>modal.style.display="none";
+window.onclick=(e)=>{if(e.target==modal)modal.style.display="none";};
+
+starEls.forEach(star=>{
+  star.addEventListener("click",()=>{
+    selectedRating=star.getAttribute("data-value");
+    starEls.forEach(s=>s.classList.remove("active"));
+    for(let i=0;i<selectedRating;i++)starEls[i].classList.add("active");
+  });
+});
+
+function loadReviews(){
+  const data=JSON.parse(localStorage.getItem("reviews")||"[]");
+  reviewList.innerHTML="";
+  if(data.length===0){emptyMsg.style.display="block";return;}
+  emptyMsg.style.display="none";
+  data.forEach(r=>{
+    const div=document.createElement("div");
+    div.className="review-item";
+    div.innerHTML=`
+      <div class="stars">${"★".repeat(r.rating)}${"☆".repeat(5-r.rating)}</div>
+      <div class="reviewer">${r.name||"Anonymous"}</div>
+      <div class="comment">${r.text}</div>
+    `;
+    reviewList.appendChild(div);
+  });
+  updateStats();
+}
+
+function updateStats(){
+  const data=JSON.parse(localStorage.getItem("reviews")||"[]");
+  const total=data.length;
+  const avg=total? (data.reduce((s,r)=>s+r.rating,0)/total).toFixed(1):0;
+  const satisfaction=total? Math.round((data.filter(r=>r.rating>=4).length/total)*100):0;
+  document.getElementById("totalReviews").textContent=total;
+  document.getElementById("avgRating").textContent=avg;
+  document.getElementById("satisfaction").textContent=satisfaction+"%";
+  document.getElementById("happyCustomers").textContent=data.filter(r=>r.rating>=4).length;
+}
+
+document.getElementById("submitReview").onclick=()=>{
+  const name=document.getElementById("reviewerName").value.trim();
+  const text=document.getElementById("reviewText").value.trim();
+  if(selectedRating===0||text===""){alert("Please select a rating and write your feedback.");return;}
+  const newReview={name,rating:parseInt(selectedRating),text};
+  const data=JSON.parse(localStorage.getItem("reviews")||"[]");
+  data.push(newReview);
+  localStorage.setItem("reviews",JSON.stringify(data));
+  document.getElementById("reviewerName").value="";
+  document.getElementById("reviewText").value="";
+  selectedRating=0;
+  starEls.forEach(s=>s.classList.remove("active"));
+  modal.style.display="none";
+  loadReviews();
+};
+
+loadReviews();
+</script>
+</body>
+</html>

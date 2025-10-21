@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Orders - Flavour Food Bites</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+/* --- Styles unchanged --- */
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --primary:#FF6B35; --secondary:#2C3E50; --text-primary:#fff;
+  --text-secondary:#B8BCC8; --glass: rgba(255,255,255,0.1);
+  --glass-border: rgba(255,255,255,0.2); --shadow-glow: 0 0 40px rgba(255,107,53,0.3);
+  --gradient-primary: linear-gradient(135deg,#FF6B35 0%,#E55A2B 50%,#FF8A50 100%);
+  --gradient-secondary: linear-gradient(135deg,#3498DB 0%,#2980B9 100%);
+  --gradient-success: linear-gradient(135deg,#27AE60 0%,#229954 100%);
+  --gradient-warning: linear-gradient(135deg,#F39C12 0%,#E67E22 100%);
+  --gradient-danger: linear-gradient(135deg,#E74C3C 0%,#C0392B 100%);
+}
+body { font-family:'Inter',sans-serif; background:#0F0F23; color:var(--text-primary); overflow-x:hidden; }
+body::before {
+  content:''; position:fixed; top:0; left:0; width:100%; height:100%;
+  background: radial-gradient(circle at 20% 80%, rgba(255,107,53,0.15) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(52,152,219,0.15) 0%, transparent 50%),
+              radial-gradient(circle at 40% 40%, rgba(39,174,96,0.1) 0%, transparent 50%),
+              linear-gradient(135deg,#0F0F23 0%,#1a1a3a 100%);
+  z-index:-2;
+}
+header { position:fixed; top:0; left:0; right:0; background:rgba(15,15,35,0.9); backdrop-filter:blur(20px); border-bottom:1px solid var(--glass-border); z-index:1000; }
+.navbar { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; max-width:1400px; margin:0 auto; }
+.logo-section { display:flex; align-items:center; gap:1rem; }
+.logo { width:60px; height:60px; background:var(--gradient-primary); border-radius:16px; display:flex; justify-content:center; align-items:center; color:#fff; font-size:1.8rem; font-weight:bold; box-shadow:var(--shadow-glow); }
+.brand-name { font-size:1.8rem; font-weight:800; background:var(--gradient-primary); -webkit-background-clip:text; -webkit-text-fill-color:transparent; letter-spacing:-1px; }
+.nav-links { display:flex; list-style:none; gap:2rem; }
+.nav-links a { text-decoration:none; color:var(--text-secondary); font-weight:600; padding:0.75rem 1.5rem; border-radius:12px; transition:0.3s; }
+.nav-links a.active, .nav-links a:hover { color:var(--text-primary); transform:translateY(-2px); }
+
+.orders-container { max-width:1200px; margin:0 auto; padding:120px 2rem 4rem; }
+.orders-header { text-align:center; margin-bottom:3rem; }
+.orders-title { font-size:clamp(2.5rem,5vw,4rem); font-weight:900; background:var(--gradient-primary); -webkit-background-clip:text; -webkit-text-fill-color:transparent; letter-spacing:-2px; margin-bottom:0.5rem; }
+.orders-subtitle { font-size:1.2rem; color:var(--text-secondary); }
+.filter-tabs { display:flex; justify-content:center; gap:1rem; margin-bottom:3rem; flex-wrap:wrap; }
+.filter-tab { background:var(--glass); border:1px solid var(--glass-border); color:var(--text-secondary); padding:0.75rem 1.5rem; border-radius:50px; cursor:pointer; font-weight:600; }
+.filter-tab.active, .filter-tab:hover { background:var(--gradient-primary); color:#fff; transform:translateY(-2px); box-shadow:0 10px 30px rgba(255,107,53,0.3); }
+
+.summary-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1.5rem; margin-bottom:2rem; }
+.summary-card { background:var(--glass); border:1px solid var(--glass-border); border-radius:16px; text-align:center; padding:1.5rem; box-shadow:0 0 20px rgba(255,107,53,0.15); }
+.summary-card h2 { font-size:2.5rem; color:var(--primary); }
+.summary-card p { color:var(--text-secondary); margin-top:0.5rem; font-weight:600; }
+
+.orders-list { display:flex; flex-direction:column; gap:2rem; }
+.order-card { background:var(--glass); backdrop-filter:blur(20px); border:1px solid var(--glass-border); border-radius:24px; padding:2rem; transition:0.3s; position:relative; overflow:hidden; }
+.order-header { display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem; }
+.order-info h3 { font-size:1.5rem; font-weight:700; color:var(--text-primary); display:flex; align-items:center; gap:0.75rem; }
+.order-date { color:var(--text-secondary); font-size:0.9rem; }
+.order-status { padding:0.5rem 1rem; border-radius:50px; font-weight:600; font-size:0.9rem; text-transform:uppercase; letter-spacing:0.5px; }
+.status-pending { background:var(--gradient-warning); color:#fff; }
+.status-preparing { background:var(--gradient-secondary); color:#fff; }
+.status-delivering { background:var(--gradient-primary); color:#fff; }
+.status-delivered { background:var(--gradient-success); color:#fff; }
+.status-cancelled { background:var(--gradient-danger); color:#fff; }
+
+.cancel-btn { margin-top:10px; background:var(--gradient-danger); border:none; padding:0.4rem 1rem; border-radius:50px; color:#fff; font-weight:600; cursor:pointer; transition:0.3s; }
+.cancel-btn:hover { opacity:0.8; }
+
+.track-btn { margin-top:10px; background:var(--gradient-primary); border:none; padding:0.5rem 1rem; border-radius:50px; cursor:pointer; color:#fff; font-weight:600; display:inline-flex; align-items:center; gap:0.5rem; text-decoration:none; text-align:center; }
+
+.order-items { margin-bottom:1.5rem; }
+.order-item { display:flex; justify-content:space-between; align-items:center; padding:0.75rem 0; border-bottom:1px solid var(--glass-border); }
+.item-details { display:flex; align-items:center; gap:1rem; }
+.item-icon { width:40px; height:40px; background:var(--bg-light); border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--primary); font-size:1.2rem; }
+.item-name { font-weight:600; color:var(--text-primary); }
+.item-quantity { color:var(--text-secondary); font-size:0.9rem; }
+.item-price { font-weight:700; color:var(--primary); }
+.order-total { display:flex; justify-content:space-between; align-items:center; padding-top:1rem; border-top:2px solid var(--glass-border); font-size:1.25rem; font-weight:800; }
+.total-label { color:var(--text-secondary); }
+.total-amount { color:var(--primary); }
+
+.order-receipts img { width:60px; height:60px; object-fit:cover; border-radius:12px; margin-right:10px; cursor:pointer; border:1px solid rgba(255,107,53,0.3); }
+
+.modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:2000; justify-content:center; align-items:center; }
+.modal.active { display:flex; }
+.modal-content { background:#1a1a3a; border-radius:16px; padding:1rem; position:relative; }
+.modal-content img { max-width:90vw; max-height:90vh; border-radius:12px; }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="navbar">
+    <div class="logo-section">
+      <div class="logo"><i class="fas fa-utensils"></i></div>
+      <span class="brand-name">Flavour Food Bites</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="lcart.html">Cart</a></li>
+      <li><a href="orders.html" class="active">Orders</a></li>
+      <li><a href="reviews.html">Reviews</a></li>
+      <li><a href="aboutus.html">About Us</a></li>
+      <li><a href="customerService.html">Customer Service</a></li>
+      <li><a href="login.html">Logout</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="orders-container">
+  <div class="orders-header">
+    <h1 class="orders-title">My Orders</h1>
+    <p class="orders-subtitle">Track your delicious meals in real-time</p>
+  </div>
+
+  <div class="summary-grid" id="summaryGrid">
+    <div class="summary-card"><h2 id="soldCount">0</h2><p>Sold</p></div>
+    <div class="summary-card"><h2 id="pendingCount">0</h2><p>Pending</p></div>
+    <div class="summary-card"><h2 id="cancelledCount">0</h2><p>Cancelled</p></div>
+  </div>
+
+  <div class="filter-tabs">
+    <div class="filter-tab active" data-filter="all">All</div>
+    <div class="filter-tab" data-filter="pending">Pending</div>
+    <div class="filter-tab" data-filter="preparing">Preparing</div>
+    <div class="filter-tab" data-filter="delivering">Delivering</div>
+    <div class="filter-tab" data-filter="delivered">Delivered</div>
+    <div class="filter-tab" data-filter="cancelled">Cancelled</div>
+  </div>
+
+  <div class="orders-list" id="ordersList"></div>
+</main>
+
+<div class="modal" id="receiptModal">
+  <div class="modal-content">
+    <span class="modal-close" id="receiptClose" style="position:absolute; top:15px; right:20px; font-size:2rem; color:#fff; cursor:pointer;">&times;</span>
+    <img id="receiptImg" src="" alt="Receipt">
+  </div>
+</div>
+
+<script>
+const ordersList = document.getElementById('ordersList');
+const receiptModal = document.getElementById('receiptModal');
+const receiptImg = document.getElementById('receiptImg');
+const receiptClose = document.getElementById('receiptClose');
+
+let orders = JSON.parse(localStorage.getItem('orders') || '[]');
+let lastOrdersJSON = JSON.stringify(orders);
+
+const statusClasses = {
+  pending:'status-pending',
+  preparing:'status-preparing',
+  delivering:'status-delivering',
+  delivered:'status-delivered',
+  cancelled:'status-cancelled'
+};
+
+function updateSummary(){
+  document.getElementById('soldCount').textContent = orders.filter(o=>o.status==='delivered').length;
+  document.getElementById('pendingCount').textContent = orders.filter(o=>o.status==='pending').length;
+  document.getElementById('cancelledCount').textContent = orders.filter(o=>o.status==='cancelled'||o.status==='rejected').length;
+}
+
+function renderOrders(filter='all'){
+  ordersList.innerHTML = '';
+  let filtered = filter==='all'? orders : orders.filter(o=>{
+    if(filter==='cancelled') return o.status==='cancelled'||o.status==='rejected';
+    return o.status===filter;
+  });
+
+  if(filtered.length===0){
+    ordersList.innerHTML = '<p style="text-align:center;color:var(--text-secondary);font-size:1.1rem;">No orders found.</p>';
+    return;
+  }
+
+  filtered.forEach((order,index)=>{
+    const card = document.createElement('div');
+    card.className = 'order-card';
+
+    let displayStatus = (order.status==='cancelled'||order.status==='rejected') ? 'Cancelled' : order.status.charAt(0).toUpperCase()+order.status.slice(1);
+
+    let itemsHTML = order.items.map(item=>`
+      <div class="order-item">
+        <div class="item-details">
+          <div class="item-icon"><i class="fa-solid fa-utensils"></i></div>
+          <div>
+            <div class="item-name">${item.name}</div>
+            <div class="item-quantity">Qty: ${item.qty}</div>
+          </div>
+        </div>
+        <div class="item-price">₱${(item.price*item.qty).toFixed(2)}</div>
+      </div>
+    `).join('');
+
+    let receiptsHTML = '';
+    if(order.receipts && order.receipts.length>0){
+      receiptsHTML = `<div class="order-receipts">${order.receipts.map(r=>`<img src="${r}" onclick="showReceipt('${r}')" alt="Receipt">`).join('')}</div>`;
+    }
+
+    let cancelBtnHTML = order.status==='pending' ? `<button class="cancel-btn" onclick="cancelOrder(${index})">Cancel Order</button>` : '';
+    let trackBtnHTML = (order.status!=='cancelled' && order.status!=='rejected' && order.status!=='delivered') ? 
+      `<button class="track-btn" onclick="trackOrder(${order.id||index+1})"><i class="fas fa-location-dot"></i> Track</button>` : '';
+
+    card.innerHTML = `
+      <div class="order-header">
+        <div class="order-info">
+          <h3>Order #${order.id||index+1}</h3>
+          <div class="order-date">${new Date(order.date).toLocaleString()}</div>
+        </div>
+        <div class="order-status ${statusClasses[order.status]||'status-pending'}">${displayStatus}</div>
+      </div>
+      <div class="order-items">${itemsHTML}</div>
+      ${receiptsHTML}
+      ${cancelBtnHTML} ${trackBtnHTML}
+      <div class="order-total">
+        <span class="total-label">Total:</span>
+        <span class="total-amount">₱${order.total.toFixed(2)}</span>
+      </div>
+    `;
+    ordersList.appendChild(card);
+  });
+
+  updateSummary();
+}
+
+function cancelOrder(index){
+  if(confirm('Are you sure you want to cancel this order?')){
+    orders[index].status='cancelled';
+    localStorage.setItem('orders',JSON.stringify(orders));
+    renderOrders();
+  }
+}
+
+function trackOrder(orderId){
+  localStorage.setItem('trackingOrderId', orderId);
+  window.location.href='tracking.html';
+}
+
+document.querySelectorAll('.filter-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    renderOrders(tab.dataset.filter);
+  });
+});
+
+function showReceipt(src){
+  receiptImg.src=src;
+  receiptModal.classList.add('active');
+}
+
+receiptClose.onclick=()=>receiptModal.classList.remove('active');
+window.onclick=e=>{if(e.target==receiptModal) receiptModal.classList.remove('active');}
+
+// ===== Live update: poll localStorage every 1s =====
+setInterval(()=>{
+  let currentOrdersJSON = localStorage.getItem('orders') || '[]';
+  if(currentOrdersJSON !== lastOrdersJSON){
+    orders = JSON.parse(currentOrdersJSON);
+    renderOrders(document.querySelector('.filter-tab.active')?.dataset.filter || 'all');
+    lastOrdersJSON = currentOrdersJSON;
+  }
+}, 1000);
+
+renderOrders();
+</script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - Flavour Food Bites</title>
+<style>
+  body { font-family:'Inter',sans-serif; background:#0F0F23; color:#fff; padding:2rem; }
+  h1 { text-align:center; margin-bottom:2rem; color:#FF6B35; }
+  table { width:100%; border-collapse:collapse; margin-bottom:2rem; }
+  th, td { padding:1rem; text-align:left; border-bottom:1px solid #444; }
+  select { padding:0.5rem; border-radius:8px; border:none; background:#1a1a3a; color:#fff; }
+  button { padding:0.5rem 1rem; border:none; border-radius:8px; background:#FF6B35; color:#fff; cursor:pointer; }
+  img { border-radius:6px; cursor:pointer; max-width:80px; max-height:80px; margin-right:5px; }
+
+  .img-modal { display:none; position: fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; }
+  .img-modal img { max-width:90%; max-height:90%; border-radius:10px; box-shadow:0 0 20px white; }
+</style>
+</head>
+<body>
+
+<h1>Admin Dashboard</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Customer Name</th>
+      <th>Contact</th>
+      <th>Order Items</th>
+      <th>Total</th>
+      <th>Status</th>
+      <th>Remove</th>
+    </tr>
+  </thead>
+  <tbody id="orders-table"></tbody>
+</table>
+
+<h1>Customer Service Tickets</h1>
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Customer Name</th>
+      <th>Email</th>
+      <th>Subject</th>
+      <th>Message</th>
+      <th>Images</th>
+      <th>Status</th>
+      <th>Remove</th>
+    </tr>
+  </thead>
+  <tbody id="tickets-table"></tbody>
+</table>
+
+<div class="img-modal" id="imgModal"><img id="modalImg" src=""></div>
+
+<script>
+let orders = JSON.parse(localStorage.getItem('orders')) || [];
+let tickets = JSON.parse(localStorage.getItem('tickets')) || [];
+
+const imgModal = document.getElementById('imgModal');
+const modalImg = document.getElementById('modalImg');
+imgModal.addEventListener('click', ()=> imgModal.style.display='none');
+
+function renderOrders() {
+  const tbody = document.getElementById('orders-table');
+  tbody.innerHTML = '';
+  orders.forEach((order,index)=>{
+    let itemsStr = order.items.map(i=>`${i.name} x${i.qty}`).join(', ');
+    let imagesStr = order.receipts?.map(img=>`<img src="${img}" class="order-img">`).join('') || '';
+    tbody.innerHTML += `
+      <tr>
+        <td>${index+1}</td>
+        <td>${order.customerName}</td>
+        <td>${order.customerContact}</td>
+        <td>${itemsStr} ${imagesStr}</td>
+        <td>₱${order.total.toFixed(2)}</td>
+        <td>
+          <select data-index="${index}">
+            <option value="pending" ${order.status==='pending'?'selected':''}>Pending</option>
+            <option value="preparing" ${order.status==='preparing'?'selected':''}>Preparing</option>
+            <option value="on_the_way" ${order.status==='on_the_way'?'selected':''}>On The Way</option>
+            <option value="delivered" ${order.status==='delivered'?'selected':''}>Delivered</option>
+          </select>
+        </td>
+        <td><button data-index="${index}" class="remove-btn">Remove</button></td>
+      </tr>
+    `;
+  });
+  document.querySelectorAll('.order-img').forEach(img=> img.addEventListener('click', e=>{
+    modalImg.src = e.target.src; imgModal.style.display='flex';
+  }));
+}
+
+function renderTickets() {
+  const tbody = document.getElementById('tickets-table');
+  tbody.innerHTML = '';
+  tickets.forEach((ticket,index)=>{
+    let imagesStr = ticket.images?.map(img=>`<img src="${img}" class="ticket-img">`).join('') || '';
+    tbody.innerHTML += `
+      <tr>
+        <td>${index+1}</td>
+        <td>${ticket.name}</td>
+        <td>${ticket.email}</td>
+        <td>${ticket.subject}</td>
+        <td>${ticket.message}</td>
+        <td>${imagesStr}</td>
+        <td>
+          <select data-index="${index}">
+            <option value="pending" ${ticket.status==='pending'?'selected':''}>Pending</option>
+            <option value="in_progress" ${ticket.status==='in_progress'?'selected':''}>In Progress</option>
+            <option value="resolved" ${ticket.status==='resolved'?'selected':''}>Resolved</option>
+          </select>
+        </td>
+        <td><button data-index="${index}" class="ticket-remove-btn">Remove</button></td>
+      </tr>
+    `;
+  });
+  document.querySelectorAll('.ticket-img').forEach(img=> img.addEventListener('click', e=>{
+    modalImg.src = e.target.src; imgModal.style.display='flex';
+  }));
+}
+
+// ===== Event Listeners =====
+// Order status
+document.getElementById('orders-table').addEventListener('change', e=>{
+  if(e.target.tagName==='SELECT'){
+    const index = e.target.dataset.index;
+    orders[index].status = e.target.value;
+    localStorage.setItem('orders', JSON.stringify(orders));
+    
+    // ✅ Update tracking immediately
+    localStorage.setItem('activeDelivery', e.target.value);
+  }
+});
+
+// Remove order
+document.getElementById('orders-table').addEventListener('click', e=>{
+  if(e.target.classList.contains('remove-btn')){
+    const index = e.target.dataset.index;
+    if(confirm(`Remove Order #${parseInt(index)+1}?`)){
+      orders.splice(index,1);
+      localStorage.setItem('orders', JSON.stringify(orders));
+      renderOrders();
+    }
+  }
+});
+
+// Ticket status
+document.getElementById('tickets-table').addEventListener('change', e=>{
+  if(e.target.tagName==='SELECT'){
+    const index = e.target.dataset.index;
+    tickets[index].status = e.target.value;
+    localStorage.setItem('tickets', JSON.stringify(tickets));
+  }
+});
+
+// Remove ticket
+document.getElementById('tickets-table').addEventListener('click', e=>{
+  if(e.target.classList.contains('ticket-remove-btn')){
+    const index = e.target.dataset.index;
+    if(confirm(`Remove Ticket #${parseInt(index)+1}?`)){
+      tickets.splice(index,1);
+      localStorage.setItem('tickets', JSON.stringify(tickets));
+      renderTickets();
+    }
+  }
+});
+
+/* ===== Live update from other tabs ===== */
+window.addEventListener('storage', e=>{
+  if(e.key==='orders'){ orders = JSON.parse(e.newValue||'[]'); renderOrders(); }
+  if(e.key==='tickets'){ tickets = JSON.parse(e.newValue||'[]'); renderTickets(); }
+});
+
+let lastOrdersJSON = JSON.stringify(orders);
+let lastTicketsJSON = JSON.stringify(tickets);
+setInterval(()=>{
+  const currentOrders = localStorage.getItem('orders')||'[]';
+  const currentTickets = localStorage.getItem('tickets')||'[]';
+  if(currentOrders!==lastOrdersJSON){ orders = JSON.parse(currentOrders); renderOrders(); lastOrdersJSON=currentOrders; }
+  if(currentTickets!==lastTicketsJSON){ tickets = JSON.parse(currentTickets); renderTickets(); lastTicketsJSON=currentTickets; }
+}, 1000);
+
+/* ===== Initial Render ===== */
+renderOrders();
+renderTickets();
+</script>
+</body>
+</html>

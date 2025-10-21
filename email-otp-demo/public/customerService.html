@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Customer Service</title>
+<style>
+  /* Keep your existing CSS mostly unchanged */
+  * {margin:0; padding:0; box-sizing:border-box;}
+  :root {
+    --primary-color: #FF6B35;
+    --background: #0F0F23;
+    --background-light: #1a1a3a;
+    --text-primary: #FFFFFF;
+    --text-secondary: #B8BCC8;
+    --glass-bg: rgba(255,255,255,0.1);
+    --glass-border: rgba(255,255,255,0.2);
+    --gradient-primary: linear-gradient(135deg,#FF6B35 0%,#E55A2B 50%,#FF8A50 100%);
+  }
+  body {font-family:'Inter',sans-serif; background: var(--background); color: var(--text-primary); line-height:1.6; display:flex; flex-direction:column; min-height:100vh; overflow-x:hidden;}
+  header {position:fixed; top:0; left:0; right:0; background: rgba(15,15,35,0.9); backdrop-filter: blur(20px); border-bottom:1px solid var(--glass-border); z-index:1000;}
+  .navbar {display:flex; align-items:center; justify-content:space-between; padding:1rem 2rem; max-width:1400px; margin:0 auto;}
+  .logo-section {display:flex; align-items:center; gap:1rem;}
+  .logo {width:60px; height:60px; background:var(--gradient-primary); border-radius:16px; display:flex; align-items:center; justify-content:center; color:white; font-size:1.8rem; font-weight:bold; animation:logoFloat 3s ease-in-out infinite;}
+  @keyframes logoFloat {0%,100{transform:translateY(0);}50%{transform:translateY(-5px);}}
+  .brand-name {font-size:1.8rem; font-weight:800; background:var(--gradient-primary); -webkit-background-clip:text; -webkit-text-fill-color:transparent; letter-spacing:-1px;}
+  .nav-links {display:flex; list-style:none; gap:2rem;}
+  .nav-links a {text-decoration:none; color:var(--text-secondary); font-weight:600; padding:0.75rem 1.5rem; border-radius:12px; transition:all 0.3s ease; position:relative;}
+  .nav-links a span {position:relative; z-index:1;}
+  .nav-links a:hover, .nav-links a.active {color:var(--text-primary); transform:translateY(-2px);}
+  .main-container {flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding:140px 2rem 4rem; gap:2rem; width:100%;}
+  .login-container, .tickets-section {background:var(--glass-bg); backdrop-filter:blur(30px); border:1px solid var(--glass-border); border-radius:24px; padding:2rem; width:100%; max-width:600px;}
+  .login-header {text-align:center; margin-bottom:2rem;}
+  .login-logo {width:80px; height:80px; background:var(--gradient-primary); border-radius:20px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; color:white; margin:0 auto 1rem; animation:logoFloat 3s ease-in-out infinite;}
+  .login-title {font-size:2rem; font-weight:800; background:var(--gradient-primary); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:0.5rem;}
+  .login-subtitle {color:var(--text-secondary); font-size:1rem; margin-bottom:1.5rem;}
+  .login-form {display:flex; flex-direction:column; gap:1rem;}
+  .form-group {position:relative; display:flex; flex-direction:column;}
+  .form-label {color: var(--text-primary); font-weight:600; margin-bottom:0.25rem;}
+  .form-input, .form-textarea, .form-file {width:100%; padding:0.75rem 1rem; background: var(--background-light); border:1px solid var(--glass-border); border-radius:12px; color:var(--text-primary); font-size:1rem;}
+  .form-textarea {resize:none;}
+  .login-button {padding:1rem; background:var(--gradient-primary); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer; transition:all 0.3s ease;}
+  .tickets-section h2 {color:var(--gradient-primary); text-align:center; margin-bottom:1rem;}
+  .ticket-card {background:var(--background-light); border-radius:16px; padding:1rem; margin-bottom:1rem; display:flex; flex-direction:column; gap:0.5rem;}
+  .ticket-images {display:flex; flex-wrap:wrap; gap:0.5rem;}
+  .ticket-images img {max-width:100px; max-height:100px; object-fit:cover; border-radius:8px; cursor:pointer; transition:transform 0.2s;}
+  .ticket-images img:hover {transform:scale(1.1);}
+  /* Modal */
+  .modal {display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:10000;}
+  .modal img {max-width:90%; max-height:90%; border-radius:12px;}
+  .modal:target {display:flex;}
+</style>
+</head>
+<body>
+<header>
+  <nav class="navbar">
+    <div class="logo-section">
+      <div class="logo">CS</div>
+      <span class="brand-name">Customer Service</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html"><span>Home</span></a></li>
+      <li><a href="menu.html"><span>Menu</span></a></li>
+      <li><a href="lcart.html"><span>Cart</span></a></li>
+      <li><a href="orders.html"><span>Orders</span></a></li>
+      <li><a href="reviews.html"><span>Reviews</span></a></li>
+      <li><a href="aboutus.html"><span>About Us</span></a></li>
+      <li><a href="customerService.html" class="active"><span>Customer Service</span></a></li>
+      <li><a href="login.html"><span>Logout</span></a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="main-container">
+  <!-- Contact Form -->
+  <div class="login-container">
+    <div class="login-header">
+      <div class="login-logo">💬</div>
+      <h1 class="login-title">Need Help?</h1>
+      <p class="login-subtitle">Submit your complaint with optional proof images</p>
+    </div>
+    <form class="login-form" id="cs-form">
+      <div class="form-group">
+        <label class="form-label" for="name">Full Name</label>
+        <input type="text" id="name" class="form-input" placeholder="Enter your name" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="email">Email Address</label>
+        <input type="email" id="email" class="form-input" placeholder="Enter your email" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="subject">Subject</label>
+        <input type="text" id="subject" class="form-input" placeholder="Enter subject" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="message">Message</label>
+        <textarea id="message" class="form-textarea" placeholder="Write your message..." rows="5" required></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="images">Attach Images (1-5)</label>
+        <input type="file" id="images" class="form-file" accept="image/*" multiple />
+      </div>
+      <button type="submit" class="login-button">Send Message</button>
+    </form>
+  </div>
+
+  <!-- Tickets Section -->
+  <div class="tickets-section">
+    <h2>My Tickets</h2>
+    <div id="customer-tickets"></div>
+  </div>
+</main>
+
+<!-- Modal for image preview -->
+<div id="image-modal" class="modal" onclick="this.style.display='none'">
+  <img id="modal-img" src="">
+</div>
+
+<footer>
+  <p>&copy; 2025 Customer Service Portal. All rights reserved.</p>
+</footer>
+
+<script>
+const form = document.getElementById('cs-form');
+const ticketsContainer = document.getElementById('customer-tickets');
+
+// Convert image files to base64
+function readFilesAsDataURL(files){
+  return Promise.all([...files].slice(0,5).map(file => {
+    return new Promise(resolve=>{
+      const reader = new FileReader();
+      reader.onload = e => resolve(e.target.result);
+      reader.readAsDataURL(file);
+    });
+  }));
+}
+
+// Submit ticket
+form.addEventListener('submit', async e=>{
+  e.preventDefault();
+  let tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
+  const imagesInput = document.getElementById('images');
+  const images = await readFilesAsDataURL(imagesInput.files);
+  const newTicket = {
+    id: Date.now(),
+    name: document.getElementById('name').value,
+    email: document.getElementById('email').value,
+    subject: document.getElementById('subject').value,
+    message: document.getElementById('message').value,
+    images: images,
+    status: 'pending'
+  };
+  tickets.push(newTicket);
+  localStorage.setItem('tickets', JSON.stringify(tickets));
+  form.reset();
+  renderCustomerTickets();
+  alert('Ticket submitted successfully!');
+});
+
+// Render tickets live
+function renderCustomerTickets(){
+  const tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
+  ticketsContainer.innerHTML = '';
+  tickets.forEach(ticket=>{
+    const div = document.createElement('div');
+    div.className = 'ticket-card';
+    div.innerHTML = `
+      <h4>${ticket.subject}</h4>
+      <p>${ticket.message}</p>
+      ${ticket.images.length>0 ? `<div class="ticket-images">${ticket.images.map((img,i)=>`<img src="${img}" onclick="openModal('${img}')" />`).join('')}</div>` : ''}
+      <p><strong>Status:</strong> <span class="ticket-status">${ticket.status.replace('_',' ')}</span></p>
+    `;
+    ticketsContainer.appendChild(div);
+  });
+}
+
+// Modal function
+function openModal(src){
+  document.getElementById('modal-img').src = src;
+  document.getElementById('image-modal').style.display = 'flex';
+}
+
+// Live update every 2s
+renderCustomerTickets();
+setInterval(renderCustomerTickets,2000);
+</script>
+</body>
+</html>
