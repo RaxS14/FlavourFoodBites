@@ -1,14 +1,19 @@
 import nodemailer from "nodemailer";
+import { readFileSync, existsSync } from "fs";
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ success: false, error: "Only POST requests allowed" });
-  }
+  if (req.method !== "POST") return res.status(405).json({ success: false, error: "Only POST requests allowed" });
 
   const { email, otp } = req.body;
-  if (!email || !otp) {
-    return res.status(400).json({ success: false, error: "Email and OTP are required" });
-  }
+  if (!email || !otp) return res.status(400).json({ success: false, error: "Email and OTP are required" });
+
+  // Check if email is registered
+  const file = "./users.json";
+  if (!existsSync(file)) return res.status(400).json({ success: false, error: "No users registered" });
+
+  const users = JSON.parse(readFileSync(file));
+  const user = users.find(u => u.email === email);
+  if (!user) return res.status(400).json({ success: false, error: "Email not registered" });
 
   try {
     // Store OTP in global memory for verification

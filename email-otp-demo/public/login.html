@@ -188,6 +188,8 @@ body::before {
   </div>
 </main>
 
+<!-- Same CSS and HTML as your current login.html -->
+<!-- Added live register and login integration with Vercel API -->
 <script>
 // Password toggle function
 function togglePassword(inputId, toggleId) {
@@ -249,38 +251,54 @@ linkLoginFromOther.onclick = () => {
 };
 
 // ===== Register =====
-document.getElementById("registerBtn").addEventListener("click", () => {
+document.getElementById("registerBtn").addEventListener("click", async () => {
   const email = document.getElementById("registerEmail").value.trim();
   const password = document.getElementById("registerPassword").value.trim();
   if (!email || !password) return alert("Please fill all fields");
 
-  // Save in localStorage
-  let users = JSON.parse(localStorage.getItem("users") || "[]");
-  users.push({ email, password });
-  localStorage.setItem("users", JSON.stringify(users));
-  alert("Registration successful!");
-  linkLoginFromOther.click();
+  try {
+    const res = await fetch("/api/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      alert("Registration successful! You can now login.");
+      linkLoginFromOther.click();
+    } else {
+      alert(data.message || "Registration failed");
+    }
+  } catch {
+    alert("Server error. Try again.");
+  }
 });
 
 // ===== Login =====
-document.getElementById("loginBtn").addEventListener("click", () => {
+document.getElementById("loginBtn").addEventListener("click", async () => {
   const email = document.getElementById("loginEmail").value.trim();
   const password = document.getElementById("loginPassword").value.trim();
   if (!email || !password) return alert("Please fill all fields");
 
-  const users = JSON.parse(localStorage.getItem("users") || "[]");
-  const user = users.find(u => u.email === email && u.password === password);
-
-  if (user) {
-    localStorage.setItem("loggedInUser", JSON.stringify(user));
-    alert("Login successful!");
-    window.location.href = "index.html"; // Redirect
-  } else {
-    alert("Invalid email or password");
+  try {
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      alert("Login successful!");
+      window.location.href = "index.html";
+    } else {
+      alert(data.message || "Invalid email or password");
+    }
+  } catch {
+    alert("Server error. Try again.");
   }
 });
 
-// ===== OTP functionality remains unchanged =====
+// ===== OTP functionality =====
 document.getElementById("sendOTPBtn").addEventListener("click", async () => {
   const email = document.getElementById("forgotEmail").value.trim();
   if (!email) return alert("Please enter your email");
@@ -303,7 +321,7 @@ document.getElementById("sendOTPBtn").addEventListener("click", async () => {
       otpSentMessage.className = "error-message";
       otpSentMessage.style.display = "block";
     }
-  } catch (err) {
+  } catch {
     otpSentMessage.innerText = "Server error. Try again.";
     otpSentMessage.className = "error-message";
     otpSentMessage.style.display = "block";
@@ -314,7 +332,6 @@ document.getElementById("verifyOTPBtn").addEventListener("click", async () => {
   const email = document.getElementById("forgotEmail").value.trim();
   const otp = document.getElementById("forgotOTP").value.trim();
   const newPass = document.getElementById("forgotNewPassword").value.trim();
-
   if (!email || !otp || !newPass) return alert("All fields are required");
 
   try {
