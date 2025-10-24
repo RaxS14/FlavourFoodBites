@@ -1,274 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Menu - Flavour Food Bites</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    :root {
-      --primary-color: #FF6B35;
-      --primary-dark: #E55A2B;
-      --secondary-color: #2C3E50;
-      --accent-color: #3498DB;
-      --success-color: #27AE60;
-      --warning-color: #F39C12;
-      --danger-color: #E74C3C;
-      --surface: #FFFFFF;
-      --background: #0F0F23;
-      --background-light: #1a1a3a;
-      --text-primary: #FFFFFF;
-      --text-secondary: #B8BCC8;
-      --text-muted: #7A7D85;
-      --glass-bg: rgba(255, 255, 255, 0.1);
-      --glass-border: rgba(255, 255, 255, 0.2);
-      --shadow-glow: 0 0 40px rgba(255, 107, 53, 0.3);
-      --gradient-primary: linear-gradient(135deg, #FF6B35 0%, #E55A2B 50%, #FF8A50 100%);
-      --gradient-secondary: linear-gradient(135deg, #3498DB 0%, #2980B9 100%);
-      --gradient-success: linear-gradient(135deg, #27AE60 0%, #229954 100%);
-      --gradient-glass: linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu - Flavour Food Bites</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+  /* Reset & variables */
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --primary-color: #FF6B35;
+    --secondary-color: #2C3E50;
+    --background: #0F0F23;
+    --text-primary: #fff;
+    --text-secondary: #B8BCC8;
+    --text-muted: #7A7D85;
+    --glass-bg: rgba(255,255,255,0.1);
+    --glass-border: rgba(255,255,255,0.2);
+    --gradient-primary: linear-gradient(135deg,#FF6B35 0%,#E55A2B 50%,#FF8A50 100%);
+    --gradient-secondary: linear-gradient(135deg,#3498DB 0%,#2980B9 100%);
+  }
 
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--background);
-      color: var(--text-primary);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--background);
+    color: var(--text-primary);
+    overflow-x: hidden;
+  }
 
-    body::before {
-      content: '';
-      position: fixed; top:0; left:0; width:100%; height:100%;
-      background: 
-        radial-gradient(circle at 20% 80%, rgba(255, 107, 53, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(52, 152, 219, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(39, 174, 96, 0.1) 0%, transparent 50%),
-        linear-gradient(135deg, #0F0F23 0%, #1a1a3a 100%);
-      z-index: -2;
-      animation: backgroundShift 15s ease-in-out infinite;
-    }
+  header {
+    position: fixed; top:0; left:0; right:0;
+    background: rgba(15,15,35,0.9);
+    backdrop-filter: blur(20px);
+    border-bottom:1px solid var(--glass-border);
+    z-index:1000;
+  }
 
-    @keyframes backgroundShift {
-      0%,100% { filter:hue-rotate(0deg) brightness(1); }
-      50% { filter:hue-rotate(10deg) brightness(1.1); }
-    }
+  .navbar { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; max-width:1400px; margin:0 auto; }
+  .logo-section { display:flex; align-items:center; gap:1rem; }
+  .logo { width:60px; height:60px; background:var(--gradient-primary); border-radius:16px; display:flex; align-items:center; justify-content:center; color:white; font-size:1.8rem; font-weight:bold; }
+  .brand-name { font-size:1.8rem; font-weight:800; background:var(--gradient-primary); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .nav-links { display:flex; gap:2rem; list-style:none; }
+  .nav-links a { text-decoration:none; color:var(--text-secondary); font-weight:600; padding:0.5rem 1rem; border-radius:12px; position:relative; }
+  .nav-links a.active, .nav-links a:hover { color: var(--text-primary); }
 
-    header {
-      position: fixed; top:0; left:0; right:0;
-      background: rgba(15,15,35,0.9);
-      backdrop-filter: blur(20px);
-      border-bottom:1px solid var(--glass-border);
-      z-index:1000;
-      transition: all 0.3s ease;
-    }
+  /* Menu Section */
+  .menu-container { max-width:1400px; margin:0 auto; padding:140px 2rem 4rem; }
+  .menu-header { text-align:center; margin-bottom:4rem; }
+  .menu-title { font-size:clamp(3rem,6vw,5rem); font-weight:900; background:var(--gradient-primary); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .menu-subtitle { font-size:1.5rem; color:var(--text-secondary); }
 
-    header.scrolled {
-      background: rgba(15,15,35,0.95);
-      box-shadow:0 10px 40px rgba(0,0,0,0.3);
-    }
+  .menu-controls { display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:3rem; }
+  .search-container { flex:1; max-width:400px; position:relative; }
+  .search-input { width:100%; padding:0.75rem 1rem 0.75rem 2.5rem; border-radius:50px; border:1px solid var(--glass-border); background:var(--glass-bg); color:var(--text-primary); }
+  .search-icon { position:absolute; left:1rem; top:50%; transform:translateY(-50%); color:var(--text-secondary); }
 
-    .navbar { display:flex; align-items:center; justify-content:space-between; padding:1rem 2rem; max-width:1400px; margin:0 auto; }
-    .logo-section { display:flex; align-items:center; gap:1rem; }
-    .logo { width:60px; height:60px; background:var(--gradient-primary); border-radius:16px; display:flex; align-items:center; justify-content:center; color:white; font-size:1.8rem; font-weight:bold; box-shadow:var(--shadow-glow); transition: all 0.3s ease; animation: logoFloat 3s ease-in-out infinite; }
-    .logo:hover { transform:translateY(-5px) scale(1.05); box-shadow:0 15px 50px rgba(255,107,53,0.5); }
-    @keyframes logoFloat { 0%,100% { transform:translateY(0px); } 50% { transform:translateY(-5px); } }
-    .brand-name { font-size:1.8rem; font-weight:800; background:var(--gradient-primary); -webkit-background-clip:text; -webkit-text-fill-color:transparent; letter-spacing:-1px; }
+  .filter-buttons { display:flex; gap:1rem; flex-wrap:wrap; }
+  .filter-btn { padding:0.5rem 1.25rem; border-radius:50px; border:1px solid var(--glass-border); background:var(--glass-bg); color:var(--text-secondary); cursor:pointer; font-weight:600; position:relative; }
+  .filter-btn.active, .filter-btn:hover { color:white; border-color:var(--primary-color); }
 
-    .nav-links { display:flex; list-style:none; gap:2rem; }
-    .nav-links a { text-decoration:none; color:var(--text-secondary); font-weight:600; padding:0.75rem 1.5rem; border-radius:12px; transition: all 0.3s ease; position:relative; backdrop-filter:blur(10px); }
-    .nav-links a::before { content:''; position:absolute; top:0; left:0; right:0; bottom:0; background:var(--gradient-glass); border-radius:12px; opacity:0; transition: all 0.3s ease; }
-    .nav-links a:hover::before, .nav-links a.active::before { opacity:1; }
-    .nav-links a:hover, .nav-links a.active { color:var(--text-primary); transform:translateY(-2px); }
-    .nav-links a span { position:relative; z-index:1; }
+  .food-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:2rem; }
+  .food-card { background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:24px; padding:2rem; text-align:center; position:relative; overflow:hidden; transition:all 0.3s ease; }
+  .food-card:hover { transform:translateY(-10px); box-shadow:0 20px 40px rgba(255,107,53,0.2); border-color:var(--primary-color); }
 
-    .menu-container { max-width:1400px; margin:0 auto; padding:120px 2rem 4rem; }
-    .menu-header { text-align:center; margin-bottom:4rem; animation: slideInDown 0.8s ease-out; }
-    .menu-title { font-size:clamp(3rem,6vw,5rem); font-weight:900; background:var(--gradient-primary); -webkit-background-clip:text; -webkit-text-fill-color:transparent; letter-spacing:-2px; margin-bottom:1rem; }
-    .menu-subtitle { font-size:1.5rem; color:var(--text-secondary); margin-bottom:3rem; }
+  .food-image { width:120px; height:120px; border-radius:50%; margin:0 auto 1rem; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+  .food-image img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
 
-    .menu-controls { display:flex; justify-content:space-between; align-items:center; gap:2rem; margin-bottom:3rem; animation: slideInUp 0.8s ease-out 0.2s both; }
-    .search-container { position:relative; flex:1; max-width:400px; }
-    .search-input { width:100%; padding:1rem 1rem 1rem 3rem; background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:50px; color:var(--text-primary); font-size:1rem; backdrop-filter:blur(20px); transition:all 0.3s ease; }
-    .search-input:focus { outline:none; border-color:var(--primary-color); box-shadow:0 0 20px rgba(255,107,53,0.3); }
-    .search-icon { position:absolute; left:1rem; top:50%; transform:translateY(-50%); color:var(--text-secondary); }
+  .food-name { font-size:1.5rem; font-weight:700; margin-bottom:0.5rem; background:var(--gradient-secondary); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .food-category { font-size:0.8rem; font-weight:600; color:var(--text-muted); margin-bottom:0.5rem; }
+  .food-price { font-size:1.2rem; font-weight:700; color:var(--primary-color); margin-bottom:0.5rem; }
 
-    .filter-buttons { display:flex; gap:1rem; flex-wrap:wrap; }
-    .filter-btn { padding:0.75rem 1.5rem; background:var(--glass-bg); border:1px solid var(--glass-border); color:var(--text-secondary); border-radius:50px; font-weight:600; cursor:pointer; transition:all 0.3s ease; backdrop-filter:blur(20px); position:relative; overflow:hidden; }
-    .filter-btn::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:var(--gradient-primary); transition: all 0.3s ease; }
-    .filter-btn.active, .filter-btn:hover { color:white; border-color:var(--primary-color); transform:translateY(-2px); }
-    .filter-btn.active::before, .filter-btn:hover::before { left:0; }
-    .filter-btn span { position:relative; z-index:1; }
+  .status-bar { padding:0.25rem 0.5rem; border-radius:12px; font-weight:600; margin-bottom:0.5rem; color:white; display:inline-block; }
 
-    .cart-summary { position:fixed; top:120px; right:2rem; background:var(--glass-bg); backdrop-filter:blur(20px); border:1px solid var(--glass-border); border-radius:20px; padding:1.5rem; min-width:250px; z-index:500; transform:translateX(100%); transition:all 0.3s ease; }
-    .cart-summary.show { transform:translateX(0); }
-    .cart-header { display:flex; justify-content:between; align-items:center; margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:1px solid var(--glass-border); }
-    .cart-title { font-size:1.2rem; font-weight:700; color:var(--text-primary); }
-    .cart-count { background:var(--gradient-primary); color:white; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:700; }
-    .cart-items { margin-bottom:1rem; }
-    .cart-item { display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0; font-size:0.9rem; }
-    .cart-total { font-size:1.2rem; font-weight:700; color:var(--primary-color); text-align:center; padding-top:0.5rem; border-top:1px solid var(--glass-border); }
+  .add-cart-btn { padding:0.5rem 1rem; border:none; border-radius:50px; background:var(--gradient-primary); color:white; font-weight:600; cursor:pointer; transition:all 0.3s ease; }
+  .add-cart-btn:disabled { opacity:0.5; cursor:not-allowed; }
 
-    .food-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:2rem; animation: fadeInUp 0.8s ease-out 0.4s both; }
-    .food-card { background:var(--glass-bg); backdrop-filter:blur(20px); border:1px solid var(--glass-border); border-radius:24px; padding:2rem; text-align:center; transition:all 0.4s ease; position:relative; overflow:hidden; cursor:pointer; }
-    .food-card::before { content:''; position:absolute; top:0; left:0; right:0; bottom:0; background:var(--gradient-glass); opacity:0; transition:all 0.3s ease; pointer-events:none; } /* fix button click */
-    .food-card:hover::before { opacity:1; }
-    .food-card:hover { transform:translateY(-15px) scale(1.02); box-shadow:0 25px 60px rgba(255,107,53,0.2); border-color:var(--primary-color); }
+  /* Cart Sidebar */
+  .cart-summary { position:fixed; top:120px; right:2rem; background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:20px; padding:1rem; min-width:250px; z-index:500; }
+  .cart-header { display:flex; justify-content:space-between; margin-bottom:1rem; }
+  .cart-count { background:var(--primary-color); color:white; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; font-size:0.8rem; }
+  .cart-total { font-weight:700; color:var(--primary-color); text-align:center; padding-top:0.5rem; border-top:1px solid var(--glass-border); }
 
-    .food-image { width:120px; height:120px; border-radius:50%; background:var(--gradient-primary); display:flex; align-items:center; justify-content:center; font-size:3rem; color:white; margin:0 auto 1.5rem; position:relative; z-index:1; transition:all 0.3s ease; animation:imageFloat 4s ease-in-out infinite; overflow:hidden; cursor:pointer; }
-    @keyframes imageFloat { 0%,100% { transform:translateY(0px) rotate(0deg); } 50% { transform:translateY(-10px) rotate(5deg); } }
-    .food-card:hover .food-image { transform:scale(1.1) rotate(10deg); }
-
-    .food-category { font-size:0.8rem; font-weight:600; color:var(--text-muted); margin-bottom:0.5rem; }
-    .food-name { font-size:1.5rem; font-weight:700; margin-bottom:0.5rem; background:var(--gradient-secondary); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-    .food-description { font-size:0.95rem; color:var(--text-secondary); margin-bottom:1rem; }
-    .food-price { font-size:1.2rem; font-weight:700; color:var(--primary-color); margin-bottom:1rem; }
-    .add-cart-btn { padding:0.75rem 1.5rem; border:none; border-radius:50px; background:var(--gradient-primary); color:white; font-weight:600; cursor:pointer; transition:all 0.3s ease; }
-    .add-cart-btn:hover { transform:translateY(-3px) scale(1.05); box-shadow:0 15px 40px rgba(255,107,53,0.3); }
-
-    /* Image popup */
-    .image-popup {
-      position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:flex; align-items:center; justify-content:center; z-index:2000; opacity:0; pointer-events:none; transition:opacity 0.3s ease;
-    }
-    .image-popup.show { opacity:1; pointer-events:auto; }
-    .image-popup img { max-width:90%; max-height:90%; border-radius:16px; }
-
-    @keyframes slideInDown { 0%{transform:translateY(-50px);opacity:0;} 100%{transform:translateY(0);opacity:1;} }
-    @keyframes slideInUp { 0%{transform:translateY(50px);opacity:0;} 100%{transform:translateY(0);opacity:1;} }
-    @keyframes fadeInUp { 0%{transform:translateY(50px);opacity:0;} 100%{transform:translateY(0);opacity:1;} }
-  </style>
+</style>
 </head>
 <body>
-  <!-- Header -->
-  <header>
-    <nav class="navbar">
-      <div class="logo-section">
-        <div class="logo">
-          <i class="fas fa-utensils"></i>
-        </div>
-        <span class="brand-name">Flavour Food Bites</span>
-      </div>
-      <ul class="nav-links">
-        <li><a href="index.html"active><span>Home</span></a></li>
-        <li><a href="menu.html"><span>Menu</span></a></li>
-        <li><a href="lcart.html"><span>Cart</span></a></li>
-        <li><a href="orders.html"><span>Orders</span></a></li>
-        <li><a href="reviews.html"><span>Reviews</span></a></li>
-        <li><a href="aboutus.html">About Us</a></li>
-        <li><a href="customerService.html"><span>Customer Service</span></a></li>
-        <li><a href="login.html"><span>Logout</span></a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <div class="menu-container">
-    <div class="menu-header">
-      <h1 class="menu-title">Our Menu</h1>
-      <p class="menu-subtitle">Delicious meals and drinks just for you</p>
+<header>
+  <nav class="navbar">
+    <div class="logo-section">
+      <div class="logo"><i class="fas fa-utensils"></i></div>
+      <span class="brand-name">Flavour Food Bites</span>
     </div>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="lcart.html">Cart</a></li>
+      <li><a href="orders.html">Orders</a></li>
+      <li><a href="reviews.html">Reviews</a></li>
+      <li><a href="aboutus.html">About Us</a></li>
+      <li><a href="customerService.html">Customer Service</a></li>
+      <li><a href="login.html">Logout</a></li>
+    </ul>
+  </nav>
+</header>
 
-    <div class="menu-controls">
-      <div class="search-container">
-        <i class="fas fa-search search-icon"></i>
-        <input type="text" class="search-input" placeholder="Search menu...">
-      </div>
-      <div class="filter-buttons">
-        <button class="filter-btn active" data-filter="all"><span>All</span></button>
-        <button class="filter-btn" data-filter="mains"><span>Combo Meals</span></button>
-        <button class="filter-btn" data-filter="drinks"><span>Drinks</span></button>
-      </div>
-    </div>
-
-    <div class="food-grid" id="food-grid"></div>
+<div class="menu-container">
+  <div class="menu-header">
+    <h1 class="menu-title">Our Menu</h1>
+    <p class="menu-subtitle">Delicious meals and drinks just for you</p>
   </div>
 
-  <div class="cart-summary" id="cart-summary">
-    <div class="cart-header">
-      <div class="cart-title">Cart</div>
-      <div class="cart-count" id="cart-count">0</div>
+  <div class="menu-controls">
+    <div class="search-container">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" class="search-input" placeholder="Search menu...">
     </div>
-    <div class="cart-items" id="cart-items"></div>
-    <div class="cart-total" id="cart-total">₱0</div>
+    <div class="filter-buttons">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="mains">Combo Meals</button>
+      <button class="filter-btn" data-filter="drinks">Drinks</button>
+    </div>
   </div>
 
-  <!-- Image Popup -->
-  <div class="image-popup" id="image-popup"><img src="" alt=""></div>
+  <div class="food-grid" id="food-grid"></div>
+</div>
 
-  <script>
-const menuItems = [
-  { id:1, name:'Burger w/ fries & iced tea', price:100, category:'mains', image:'images/burger_icedtea.jpg' },
-  { id:2, name:'Burger w/ fries & halohalo', price:100, category:'mains', image:'images/burger_halohalo.jpg' },
-  { id:3, name:'Burger w/ fries & blue lemonade', price:100, category:'mains', image:'images/burger_bluelemonade.jpg' },
-  { id:4, name:'Burger w/ fries & oreo shake', price:100, category:'mains', image:'images/burger_oreoshake.jpg' },
-  { id:5, name:'Burger w/ fries & milo dinasaur', price:100, category:'mains', image:'images/burger_milo.jpg' },
-  { id:6, name:'Burger w/ fries & strawberry milk', price:100, category:'mains', image:'images/burger_strawberry.jpg' },
-  { id:7, name:'Nachos fries & blue lemonade', price:100, category:'mains', image:'images/nachos_bluelemonade.jpg' },
-  { id:8, name:'Buy 1 take 1 Burger w/ fries', price:110, category:'mains', image:'images/bogo_burger.jpg' },
-  { id:9, name:'Carbonara', price:100, category:'mains', image:'images/carbonara.jpg' },
-  { id:10, name:'Shawarma fries', price:80, category:'mains', image:'images/shawarma_fries.jpg' },
-  { id:11, name:'Iced tea', price:50, category:'drinks', image:'images/icedtea.jpg' },
-  { id:12, name:'Milo Dinasaur', price:60, category:'drinks', image:'images/milo_dinasaur.jpg' },
-  { id:13, name:'Halo halo', price:50, category:'drinks', image:'images/halohalo.jpg' },
-  { id:14, name:'Caramel Macchiato', price:70, category:'drinks', image:'images/caramel_macchiato.jpg' }
-];
+<div class="cart-summary" id="cart-summary">
+  <div class="cart-header">
+    <div class="cart-title">Cart</div>
+    <div class="cart-count" id="cart-count">0</div>
+  </div>
+  <div id="cart-items"></div>
+  <div class="cart-total" id="cart-total">₱0</div>
+</div>
 
-const foodGrid = document.getElementById('food-grid');
-const filterBtns = document.querySelectorAll('.filter-btn');
-const searchInput = document.querySelector('.search-input');
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
+<script>
+(() => {
+  const defaultProducts = [
+    {id:1,name:'Burger w/ fries & iced tea',price:100,category:'mains',image:'images/burger_icedtea.jpg',stock:10,pending:0,cancel:0,status:'available'},
+    {id:2,name:'Burger w/ fries & halohalo',price:100,category:'mains',image:'images/burger_halohalo.jpg',stock:10,pending:0,cancel:0,status:'available'},
+    {id:3,name:'Burger w/ fries & blue lemonade',price:100,category:'mains',image:'images/burger_bluelemonade.jpg',stock:10,pending:0,cancel:0,status:'available'},
+    {id:4,name:'Burger w/ fries & oreo shake',price:100,category:'mains',image:'images/burger_oreoshake.jpg',stock:10,pending:0,cancel:0,status:'available'},
+    {id:5,name:'Burger w/ fries & milo dinasaur',price:100,category:'mains',image:'images/burger_milo.jpg',stock:10,pending:0,cancel:0,status:'available'},
+    {id:6,name:'Burger w/ fries & strawberry milk',price:100,category:'mains',image:'images/burger_strawberry.jpg',stock:10,pending:0,cancel:0,status:'available'},
+    {id:7,name:'Nachos fries & blue lemonade',price:100,category:'mains',image:'images/nachos_bluelemonade.jpg',stock:10,pending:0,cancel:0,status:'available'},
+    {id:8,name:'Buy 1 take 1 Burger w/ fries',price:110,category:'mains',image:'images/bogo_burger.jpg',stock:10,pending:0,cancel:0,status:'available'},
+    {id:9,name:'Carbonara',price:100,category:'mains',image:'images/carbonara.jpg',stock:10,pending:0,cancel:0,status:'available'},
+    {id:10,name:'Shawarma fries',price:80,category:'mains',image:'images/shawarma_fries.jpg',stock:10,pending:0,cancel:0,status:'available'},
+    {id:11,name:'Iced tea',price:50,category:'drinks',image:'images/icedtea.jpg',stock:10,pending:0,cancel:0,status:'available'},
+    {id:12,name:'Milo Dinasaur',price:60,category:'drinks',image:'images/milo_dinasaur.jpg',stock:10,pending:0,cancel:0,status:'available'},
+    {id:13,name:'Halo halo',price:50,category:'drinks',image:'images/halohalo.jpg',stock:10,pending:0,cancel:0,status:'available'},
+    {id:14,name:'Caramel Macchiato',price:70,category:'drinks',image:'images/caramel_macchiato.jpg',stock:10,pending:0,cancel:0,status:'available'}
+  ];
 
-// Render menu items
-function displayMenuItems(items) {
-  foodGrid.innerHTML = '';
-  items.forEach(item => {
-    const card = document.createElement('div');
-    card.classList.add('food-card');
-    card.innerHTML = `
-      <div class="food-image">
-        <img src="${item.image}" alt="${item.name}" style="width:100%;height:100%;border-radius:50%;">
-      </div>
-      <div class="food-category">${item.category}</div>
-      <div class="food-name">${item.name}</div>
-      <div class="food-price">₱${item.price}</div>
-      <button class="add-cart-btn">Add to Cart</button>
-    `;
-    card.querySelector('.add-cart-btn').addEventListener('click', e => {
-      e.stopPropagation();
-      addToCart(item);
+  const foodGrid = document.getElementById('food-grid');
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const searchInput = document.querySelector('.search-input');
+  const cartCountEl = document.getElementById('cart-count');
+  const cartItemsEl = document.getElementById('cart-items');
+  const cartTotalEl = document.getElementById('cart-total');
+
+  let products = JSON.parse(localStorage.getItem('inventory')) || defaultProducts;
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  let previousInventory = JSON.stringify(products);
+
+  const saveInventory = () => localStorage.setItem('inventory', JSON.stringify(products));
+  const saveCart = () => localStorage.setItem('cart', JSON.stringify(cart));
+
+  // Update cart sidebar
+  const updateCartSidebar = () => {
+    cartItemsEl.innerHTML = '';
+    let total = 0;
+    cart.forEach(item => {
+      total += item.price * item.quantity;
+      const div = document.createElement('div');
+      div.style.marginBottom = '0.5rem';
+      div.textContent = `${item.name} x ${item.quantity} - ₱${item.price * item.quantity}`;
+      cartItemsEl.appendChild(div);
     });
-    foodGrid.appendChild(card);
-  });
-}
+    cartCountEl.textContent = cart.reduce((acc, item) => acc + item.quantity, 0);
+    cartTotalEl.textContent = `₱${total}`;
+  };
 
-function addToCart(item) {
-  const existing = cart.find(i => i.id === item.id);
-  if(existing) existing.qty += 1;
-  else cart.push({...item, qty:1});
-  localStorage.setItem('cart', JSON.stringify(cart));
-  alert(`${item.name} added to cart!`);
-}
+  // Display menu
+  const displayMenuItems = (items) => {
+    foodGrid.innerHTML = '';
+    items.forEach(item => {
+      let color = '#27AE60';
+      if(item.status==='pending') color='#F39C12';
+      else if(item.status==='rejected') color='#E74C3C';
+      else if(item.status==='out') color='#7A7D85';
 
-// Filter buttons
-filterBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
+      const disabled = item.stock <= 0 || item.status!=='available';
+      const btnText = item.status==='pending' ? 'Pending' : item.status==='rejected' ? 'Rejected' : item.stock<=0 ? 'Out of Stock' : 'Add to Cart';
+
+      const card = document.createElement('div');
+      card.className='food-card';
+      card.innerHTML = `
+        <div class="food-image"><img src="${item.image}" alt="${item.name}"></div>
+        <div class="food-category">${item.category}</div>
+        <div class="food-name">${item.name}</div>
+        <div class="food-price">₱${item.price}</div>
+        <div class="status-bar" style="background:${color}">
+          ${item.status.toUpperCase()} | Stock: ${item.stock} | Pending: ${item.pending} | Cancel: ${item.cancel}
+        </div>
+        <button class="add-cart-btn" ${disabled ? 'disabled' : ''}>${btnText}</button>
+      `;
+      card.querySelector('.add-cart-btn').addEventListener('click', () => {
+        if(disabled) return;
+        const prodIndex = products.findIndex(p => p.id===item.id);
+        if(products[prodIndex].stock>0) {
+          products[prodIndex].stock -= 1;
+          products[prodIndex].pending += 1;
+          saveInventory();
+
+          const cartIndex = cart.findIndex(p => p.id===item.id);
+          if(cartIndex>-1) cart[cartIndex].quantity += 1;
+          else cart.push({...item, quantity:1});
+          saveCart();
+          updateCartSidebar();
+          filterAndDisplay();
+        }
+      });
+      foodGrid.appendChild(card);
+    });
+  };
+
+  // Filter & search
+  const filterAndDisplay = () => {
+    const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+    let filtered = activeFilter==='all' ? products : products.filter(p => p.category===activeFilter);
+    const term = searchInput.value.toLowerCase();
+    if(term) filtered = filtered.filter(p => p.name.toLowerCase().includes(term));
+    displayMenuItems(filtered);
+  };
+
+  // Event listeners
+  filterBtns.forEach(btn => btn.addEventListener('click', () => {
     filterBtns.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    const filter = btn.dataset.filter;
-    const filteredItems = filter==='all' ? menuItems : menuItems.filter(i => i.category===filter);
-    displayMenuItems(filteredItems);
-  });
+    filterAndDisplay();
+  }));
+  searchInput.addEventListener('input', filterAndDisplay);
+
+  displayMenuItems(products);
+  updateCartSidebar();
+
+  // Live inventory update
+  setInterval(() => {
+    const latestInventory = JSON.parse(localStorage.getItem('inventory')) || defaultProducts;
+    if(JSON.stringify(latestInventory)!==previousInventory) {
+      products = latestInventory;
+      previousInventory = JSON.stringify(latestInventory);
+      filterAndDisplay();
+    }
+  },1000);
+
+// 🔔 Listen for instant updates from lcart.html
+window.addEventListener("storage", () => {
+  const latestInventory = JSON.parse(localStorage.getItem('inventory')) || defaultProducts;
+  products = latestInventory;
+  previousInventory = JSON.stringify(latestInventory);
+  filterAndDisplay(); // Re-render instantly
 });
 
-// Search input
-searchInput.addEventListener('input', () => {
-  const term = searchInput.value.toLowerCase();
-  const filteredItems = menuItems.filter(i => i.name.toLowerCase().includes(term));
-  displayMenuItems(filteredItems);
-});
-
-// Initial display
-displayMenuItems(menuItems);
+})();
 </script>
+
 </body>
 </html>

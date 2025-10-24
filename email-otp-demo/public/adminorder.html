@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orders — COFFEE & BLOOM Admin</title>
+
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+body {
+  font-family: 'Poppins', sans-serif;
+  background:#0F0F23; color:#fff; 
+  display:flex; height:100vh; overflow:hidden; 
+}
+
+/* Sidebar */
+.sidebar {
+  width:260px; background:#1a1a3a; padding:2rem 1rem;
+  display:flex; flex-direction:column; align-items:center; box-shadow:2px 0 15px rgba(0,0,0,0.2);
+  position:fixed; height:100%;
+}
+.sidebar img { width:80px; height:80px; border-radius:50%; object-fit:cover; }
+.sidebar h2 { margin-top:0.5rem; font-size:1.3rem; color:#FF6B35; }
+.sidebar p { font-size:0.9rem; color:#aaa; margin-bottom:2rem; }
+.sidebar .nav { list-style:none; width:100%; }
+.sidebar .nav li { margin:0.3rem 0; }
+.sidebar .nav a {
+  display:flex; align-items:center;
+  text-decoration:none; color:#fff; 
+  padding:0.7rem 1rem; border-radius:10px;
+  transition:all 0.3s ease;
+}
+.sidebar .nav a i { margin-right:10px; font-size:1.2rem; }
+.sidebar .nav a.active, .sidebar .nav a:hover {
+  background:#FF6B35; color:#fff; font-weight:600;
+}
+
+/* Main */
+main {
+  flex:1; margin-left:260px; padding:2rem; overflow-y:auto;
+}
+header {
+  background:#1a1a3a; color:#fff; padding:1rem 1.5rem;
+  border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.3);
+  margin-bottom:2rem; display:flex; justify-content:space-between; align-items:center;
+}
+header h1 { font-size:1.5rem; }
+.refresh-indicator {
+  font-size:0.9rem; background: rgba(255,255,255,0.2);
+  padding:0.4rem 0.8rem; border-radius:10px; animation:pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:0.6;} 50%{opacity:1;} }
+
+/* Cards */
+.card {
+  border-radius:20px; padding:1.2rem; margin-bottom:1.5rem; 
+  background:#1a1a3a; box-shadow:0 10px 25px rgba(255, 107, 53,0.3);
+  transition:0.3s; display:flex; gap:1rem; flex-direction:column; position:relative;
+}
+.card:hover { transform:translateY(-4px); box-shadow:0 15px 35px rgba(255,107,53,0.5); }
+.card img { width:60px; height:60px; border-radius:6px; object-fit:cover; cursor:pointer; }
+.card h3 { margin-bottom:0.5rem; font-weight:700; color:#FF6B35; }
+.card p { margin-bottom:0.3rem; }
+.card select { margin-top:5px; padding:4px 6px; border-radius:6px; border:none; background:#0F0F23; color:#fff; }
+.card button {
+  margin-top:5px; padding:6px 10px;
+  background:#FF6B35; border:none; color:#fff; border-radius:6px; cursor:pointer;
+  transition:0.3s;
+}
+.card button:hover { background:#ff855c; }
+
+/* Toast Notification */
+.toast {
+  position:fixed; top:20px; right:20px;
+  background:#E74C3C; color:#fff;
+  padding:1rem 1.5rem; border-radius:12px;
+  box-shadow:0 5px 20px rgba(231,76,60,0.5);
+  opacity:0; transform:translateY(-20px);
+  transition:all 0.4s ease; z-index:9999;
+}
+.toast.show { opacity:1; transform:translateY(0); }
+
+/* Status colors */
+.status-pending { background-color: #2a2a40; }
+.status-inprogress { background-color: #2a3a5a; }
+.status-delivered { background-color: #3a5a3a; }
+.status-cancelled { background-color: #5a2a2a; }
+
+/* Blink Animation for Cancelled Orders */
+.blink {
+  animation: blinkEffect 1s ease-in-out 3;
+}
+@keyframes blinkEffect {
+  0%, 100% { box-shadow: 0 0 20px 5px red; }
+  50% { box-shadow: 0 0 40px 10px red; }
+}
+
+#lightbox {
+  display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+  background: rgba(0,0,0,0.85); justify-content:center; align-items:center; z-index:9998;
+}
+#lightbox img { max-width:90%; max-height:90%; border-radius:12px; }
+
+@media(max-width:768px){
+  body{flex-direction:column;}
+  .sidebar{width:100%; flex-direction:row; justify-content:space-around; padding:1rem;}
+  main{margin-left:0; padding:1rem;}
+  .card{align-items:center; text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <img src="images/admin-avatar.png" alt="Admin Avatar">
+  <h2>Admin</h2>
+  <p>Administrator</p>
+  <ul class="nav">
+    <li><a href="admin.html"><i class="ri-dashboard-line"></i> Dashboard</a></li>
+    <li><a href="adminorder.html" class="active"><i class="ri-shopping-bag-3-line"></i> Orders</a></li>
+    <li><a href="inventory.html"><i class="ri-archive-2-line"></i> Inventory</a></li>
+    <li><a href="suppliers.html"><i class="ri-truck-line"></i> Suppliers</a></li>
+    <li><a href="reports.html"><i class="ri-bar-chart-2-line"></i> Reports</a></li>
+    <li><a href="#" id="logoutLink"><i class="ri-logout-circle-line"></i> Logout</a></li>
+  </ul>
+</aside>
+
+<main>
+  <header>
+    <h1>Orders</h1>
+    <span class="refresh-indicator">Live updates 🔄</span>
+  </header>
+
+  <div id="ordersContainer"></div>
+</main>
+
+<div id="lightbox"><img src="" alt="Attachment"></div>
+<div id="toast" class="toast">A customer cancelled an order ❗</div>
+
+<script>
+const ordersContainer = document.getElementById('ordersContainer');
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = lightbox.querySelector('img');
+const toast = document.getElementById('toast');
+
+let orders = JSON.parse(localStorage.getItem('orders')) || [];
+let lastOrdersJSON = JSON.stringify(orders);
+let notifiedCancelledIds = new Set();
+
+function showToast(message){
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'), 3000);
+}
+
+function getStatusClass(status){
+  switch(status.toLowerCase()){
+    case 'pending': return 'status-pending';
+    case 'preparing': case 'on_the_way': return 'status-inprogress';
+    case 'delivered': return 'status-delivered';
+    case 'cancelled': case 'rejected': return 'status-cancelled';
+    default: return 'status-pending';
+  }
+}
+
+function renderOrders(){
+  ordersContainer.innerHTML='';
+  if(orders.length===0){ 
+    ordersContainer.innerHTML='<p>No orders yet.</p>'; 
+    return; 
+  }
+
+  orders.forEach((order,index)=>{
+    const itemsStr = order.items.map(i=>`${i.name} x${i.qty}`).join(', ');
+    const imagesHTML = order.receipts?.map((img,idx)=>`<img src="${img}" data-index="${idx}">`).join('')||'';
+
+    const box = document.createElement('div');
+    box.className = `card ${getStatusClass(order.status)}`;
+    box.dataset.id = order.id || index;
+
+    box.innerHTML = `
+      <h3>Order #${order.id || index} — ${order.customerName}</h3>
+      <p>Contact: ${order.customerContact}</p>
+      <p>Items: ${itemsStr}</p>
+      <p>Total: ₱${order.total.toFixed(2)}</p>
+      <div>Receipts: ${imagesHTML}</div>
+      <p>Status: 
+        <select data-index="${index}">
+          <option value="pending" ${order.status==='pending'?'selected':''}>Pending</option>
+          <option value="preparing" ${order.status==='preparing'?'selected':''}>Preparing</option>
+          <option value="on_the_way" ${order.status==='on_the_way'?'selected':''}>On The Way</option>
+          <option value="delivered" ${order.status==='delivered'?'selected':''}>Delivered</option>
+          <option value="cancelled" ${order.status==='cancelled'?'selected':''}>Cancelled</option>
+        </select>
+      </p>
+      <button class="remove-btn" data-index="${index}"><i class="ri-delete-bin-6-line"></i> Remove</button>
+    `;
+    ordersContainer.appendChild(box);
+  });
+
+  // handle status change
+  ordersContainer.querySelectorAll('select').forEach(sel=>{
+    sel.addEventListener('change',e=>{
+      const idx = e.target.dataset.index;
+      orders[idx].status = e.target.value;
+      localStorage.setItem('orders', JSON.stringify(orders));
+      renderOrders();
+    });
+  });
+
+  // handle remove button
+  ordersContainer.querySelectorAll('.remove-btn').forEach(btn=>{
+    btn.addEventListener('click',e=>{
+      const idx = e.target.closest('button').dataset.index;
+      if(confirm('Remove this order?')){
+        orders.splice(idx,1);
+        localStorage.setItem('orders', JSON.stringify(orders));
+        renderOrders();
+      }
+    });
+  });
+
+  // image click lightbox
+  ordersContainer.querySelectorAll('img').forEach(img=>{
+    img.addEventListener('click',e=>{
+      lightboxImg.src = e.target.src;
+      lightbox.style.display='flex';
+    });
+  });
+}
+
+lightbox.addEventListener('click',()=>{ lightbox.style.display='none'; });
+
+function highlightCancelled(orderId){
+  const el = document.querySelector(`.card[data-id="${orderId}"]`);
+  if(el){
+    el.classList.add('blink');
+    setTimeout(()=>el.classList.remove('blink'), 3000);
+  }
+}
+
+function liveUpdate(){
+  const currentOrders = JSON.parse(localStorage.getItem('orders'))||[];
+
+  currentOrders.forEach(order=>{
+    if(order.status === 'cancelled' && !notifiedCancelledIds.has(order.id)){
+      showToast(`Customer cancelled Order #${order.id || 'unknown'}`);
+      highlightCancelled(order.id);
+      notifiedCancelledIds.add(order.id);
+    }
+  });
+
+  if(JSON.stringify(currentOrders)!==lastOrdersJSON){ 
+    orders=currentOrders; 
+    lastOrdersJSON=JSON.stringify(orders); 
+    renderOrders(); 
+  }
+}
+
+setInterval(liveUpdate,1000);
+renderOrders();
+
+document.getElementById('logoutLink').addEventListener('click',e=>{
+  e.preventDefault(); 
+  localStorage.clear(); 
+  window.location.href='login.html';
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventory — Flavour Food Bites</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Inter', sans-serif; background: #0F0F23; color: #FFF; display:flex; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 220px;
+    background: #111;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+  }
+  .sidebar img { width:80px; border-radius:50%; margin-bottom:1rem; }
+  .sidebar h2 { margin-bottom:0.25rem; }
+  .sidebar p { margin-bottom:2rem; font-size:0.9rem; color:#AAA; }
+  .sidebar ul { list-style:none; width:100%; }
+  .sidebar ul li { margin-bottom:1rem; }
+  .sidebar ul li a {
+    color:#FFF;
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    padding:0.5rem 1rem;
+    border-radius:8px;
+    transition:0.2s;
+  }
+  .sidebar ul li a.active, .sidebar ul li a:hover { background:#FF6B35; color:#FFF; }
+  .sidebar ul li a i { margin-right:0.5rem; }
+
+  /* Main Content */
+  .main {
+    flex:1;
+    padding: 2rem;
+    overflow-x:hidden;
+  }
+  h1 { text-align:center; margin-bottom:2rem; color:#FF6B35; }
+
+  .inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px,1fr));
+    gap: 1.5rem;
+  }
+  .inventory-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius:16px;
+    text-align:center;
+    padding:1rem;
+    transition: transform 0.3s;
+  }
+  .inventory-card:hover { transform: translateY(-5px); }
+  .inventory-card.out-of-stock { opacity:0.5; }
+
+  .inventory-card img {
+    width:100px; height:100px; border-radius:50%; margin-bottom:0.5rem; object-fit:cover;
+  }
+  .product-name { font-weight:700; margin-bottom:0.25rem; }
+  .product-price { color:#FF6B35; font-weight:600; margin-bottom:0.5rem; }
+  .product-category { font-size:0.8rem; color:#B8BCC8; margin-bottom:0.5rem; }
+
+  .status-counts input {
+    width:50px;
+    padding:0.2rem 0.3rem;
+    margin:0 0.2rem;
+    border-radius:6px;
+    border:none;
+    text-align:center;
+    font-weight:600;
+  }
+  .status-select {
+    width:100%;
+    padding:0.4rem;
+    border-radius:8px;
+    border:none;
+    font-weight:600;
+    margin-top:0.5rem;
+    cursor:pointer;
+  }
+  .status-select.available { background:#27AE60; color:#FFF; }
+  .status-select.out { background:#7A7D85; color:#FFF; }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <img src="images/admin-avatar.png" alt="Admin Avatar">
+  <h2>Admin</h2>
+  <p>Administrator</p>
+  <ul class="nav">
+    <li><a href="admin.html"><i class="ri-dashboard-line"></i> Dashboard</a></li>
+    <li><a href="adminorder.html"><i class="ri-shopping-bag-3-line"></i> Orders</a></li>
+    <li><a href="inventory.html"><i class="ri-archive-2-line"></i> Inventory</a></li>
+    <li><a href="suppliers.html"><i class="ri-truck-line"></i> Suppliers</a></li>
+    <li><a href="reports.html"><i class="ri-bar-chart-2-line"></i> Reports</a></li>
+    <li><a href="#" id="logoutLink"><i class="ri-logout-circle-line"></i> Logout</a></li>
+  </ul>
+</aside>
+
+<!-- Main Content -->
+<div class="main">
+  <h1>Inventory Management</h1>
+  <div class="inventory-grid" id="inventory-grid"></div>
+</div>
+
+<script>
+(() => {
+  const defaultProducts = [
+    { id:1, name:'Burger w/ fries & iced tea', price:100, category:'mains', image:'images/burger_icedtea.jpg', stock:10, status:'available', pending:0, cancel:0 },
+    { id:2, name:'Burger w/ fries & halohalo', price:100, category:'mains', image:'images/burger_halohalo.jpg', stock:10, status:'available', pending:0, cancel:0 },
+    { id:3, name:'Burger w/ fries & blue lemonade', price:100, category:'mains', image:'images/burger_bluelemonade.jpg', stock:10, status:'available', pending:0, cancel:0 },
+    { id:4, name:'Burger w/ fries & oreo shake', price:100, category:'mains', image:'images/burger_oreoshake.jpg', stock:10, status:'available', pending:0, cancel:0 },
+    { id:5, name:'Burger w/ fries & milo dinasaur', price:100, category:'mains', image:'images/burger_milo.jpg', stock:10, status:'available', pending:0, cancel:0 },
+    { id:6, name:'Burger w/ fries & strawberry milk', price:100, category:'mains', image:'images/burger_strawberry.jpg', stock:10, status:'available', pending:0, cancel:0 },
+    { id:7, name:'Nachos fries & blue lemonade', price:100, category:'mains', image:'images/nachos_bluelemonade.jpg', stock:10, status:'available', pending:0, cancel:0 },
+    { id:8, name:'Buy 1 take 1 Burger w/ fries', price:110, category:'mains', image:'images/bogo_burger.jpg', stock:10, status:'available', pending:0, cancel:0 },
+    { id:9, name:'Carbonara', price:100, category:'mains', image:'images/carbonara.jpg', stock:10, status:'available', pending:0, cancel:0 },
+    { id:10, name:'Shawarma fries', price:80, category:'mains', image:'images/shawarma_fries.jpg', stock:10, status:'available', pending:0, cancel:0 },
+    { id:11, name:'Iced tea', price:50, category:'drinks', image:'images/icedtea.jpg', stock:10, status:'available', pending:0, cancel:0 },
+    { id:12, name:'Milo Dinasaur', price:60, category:'drinks', image:'images/milo_dinasaur.jpg', stock:10, status:'available', pending:0, cancel:0 },
+    { id:13, name:'Halo halo', price:50, category:'drinks', image:'images/halohalo.jpg', stock:10, status:'available', pending:0, cancel:0 },
+    { id:14, name:'Caramel Macchiato', price:70, category:'drinks', image:'images/caramel_macchiato.jpg', stock:10, status:'available', pending:0, cancel:0 }
+  ];
+
+  let products = JSON.parse(localStorage.getItem('inventory')) || defaultProducts;
+  const grid = document.getElementById('inventory-grid');
+
+  const saveInventory = () => localStorage.setItem('inventory', JSON.stringify(products));
+
+  const renderInventory = () => {
+    grid.innerHTML = '';
+    products.forEach(product => {
+      if(product.stock <= 0) product.status = 'out';
+      const card = document.createElement('div');
+      card.className = `inventory-card${product.status==='out' ? ' out-of-stock' : ''}`;
+      card.innerHTML = `
+        <img src="${product.image}" alt="${product.name}">
+        <div class="product-name">${product.name}</div>
+        <div class="product-price">₱${product.price}</div>
+        <div class="product-category">${product.category}</div>
+        <div class="status-counts">
+          Stock: <input type="number" min="0" value="${product.stock}" class="stock-input" data-id="${product.id}">
+          Pending: <input type="number" min="0" value="${product.pending}" class="pending-input" data-id="${product.id}">
+          Cancel: <input type="number" min="0" value="${product.cancel}" class="cancel-input" data-id="${product.id}">
+        </div>
+        <select class="status-select ${product.status}" data-id="${product.id}">
+          <option value="available" ${product.status==='available'?'selected':''}>Available</option>
+          <option value="out" ${product.status==='out'?'selected':''}>Out of Stock</option>
+        </select>
+      `;
+      grid.appendChild(card);
+    });
+
+    // Event listeners for inputs
+    document.querySelectorAll('.stock-input').forEach(input => {
+      input.addEventListener('change', e => {
+        const id = parseInt(e.target.dataset.id);
+        const product = products.find(p => p.id === id);
+        product.stock = parseInt(e.target.value) || 0;
+        product.status = product.stock <= 0 ? 'out' : (product.status==='out' ? 'available' : product.status);
+        saveInventory();
+        renderInventory();
+      });
+    });
+
+    document.querySelectorAll('.pending-input').forEach(input => {
+      input.addEventListener('change', e => {
+        const id = parseInt(e.target.dataset.id);
+        const product = products.find(p => p.id === id);
+        product.pending = parseInt(e.target.value) || 0;
+        saveInventory();
+        renderInventory();
+      });
+    });
+
+    document.querySelectorAll('.cancel-input').forEach(input => {
+      input.addEventListener('change', e => {
+        const id = parseInt(e.target.dataset.id);
+        const product = products.find(p => p.id === id);
+        product.cancel = parseInt(e.target.value) || 0;
+        saveInventory();
+        renderInventory();
+      });
+    });
+
+    // Event listener for status
+    document.querySelectorAll('.status-select').forEach(select => {
+      select.addEventListener('change', e => {
+        const id = parseInt(e.target.dataset.id);
+        const product = products.find(p => p.id === id);
+        product.status = e.target.value;
+        saveInventory();
+        renderInventory();
+      });
+    });
+  };
+
+  renderInventory();
+})();
+</script>
+</body>
+</html>
