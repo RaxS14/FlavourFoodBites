@@ -12,40 +12,84 @@
 * { box-sizing: border-box; margin:0; padding:0; }
 body {
   font-family: 'Poppins', sans-serif;
-  background:#0F0F23; color:#fff;
-  display:flex; height:100vh; overflow:hidden;
+  background:#0F0F23; 
+  color:#fff;
+  display:flex; 
+  height:100vh; 
+  overflow:hidden;
 }
 
 /* Sidebar */
 .sidebar {
-  width:260px; background:#1a1a3a; padding:2rem 1rem;
-  display:flex; flex-direction:column; align-items:center; box-shadow:2px 0 15px rgba(0,0,0,0.2);
-  position:fixed; height:100%;
+  width:260px; 
+  background:#1a1a3a; 
+  padding:2rem 1rem;
+  display:flex; 
+  flex-direction:column; 
+  align-items:center; 
+  box-shadow:2px 0 15px rgba(0,0,0,0.2);
+  position:fixed; 
+  height:100%;
 }
-.sidebar img { width:80px; height:80px; border-radius:50%; object-fit:cover; }
-.sidebar h2 { margin-top:0.5rem; font-size:1.3rem; color:#FF6B35; }
-.sidebar p { font-size:0.9rem; color:#aaa; margin-bottom:2rem; }
-.sidebar .nav { list-style:none; width:100%; }
-.sidebar .nav li { margin:0.3rem 0; }
+.sidebar img { 
+  width:80px; 
+  height:80px; 
+  border-radius:50%; 
+  object-fit:cover; 
+}
+.sidebar h2 { 
+  margin-top:0.5rem; 
+  font-size:1.3rem; 
+  color:#FF6B35; 
+}
+.sidebar p { 
+  font-size:0.9rem; 
+  color:#aaa; 
+  margin-bottom:2rem; 
+}
+.sidebar .nav { 
+  list-style:none; 
+  width:100%; 
+}
+.sidebar .nav li { 
+  margin:0.3rem 0; 
+}
 .sidebar .nav a {
-  display:flex; align-items:center;
-  text-decoration:none; color:#fff;
-  padding:0.7rem 1rem; border-radius:10px;
+  display:flex; 
+  align-items:center;
+  text-decoration:none; 
+  color:#fff;
+  padding:0.7rem 1rem; 
+  border-radius:10px;
   transition:all 0.3s ease;
 }
-.sidebar .nav a i { margin-right:10px; font-size:1.2rem; }
+.sidebar .nav a i { 
+  margin-right:10px; 
+  font-size:1.2rem; 
+}
 .sidebar .nav a.active, .sidebar .nav a:hover {
-  background:#FF6B35; color:#fff; font-weight:600;
+  background:#FF6B35; 
+  color:#fff; 
+  font-weight:600;
 }
 
 /* Main */
 main {
-  flex:1; margin-left:260px; padding:2rem; overflow-y:auto;
+  flex:1; 
+  margin-left:260px; 
+  padding:2rem; 
+  overflow-y:auto;
 }
 header {
-  background:#1a1a3a; color:#fff; padding:1rem 1.5rem;
-  border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.3);
-  margin-bottom:2rem; display:flex; justify-content:space-between; align-items:center;
+  background:#1a1a3a; 
+  color:#fff; 
+  padding:1rem 1.5rem;
+  border-radius:12px; 
+  box-shadow:0 4px 10px rgba(0,0,0,0.3);
+  margin-bottom:2rem; 
+  display:flex; 
+  justify-content:space-between; 
+  align-items:center;
 }
 header h1 { font-size:1.5rem; }
 
@@ -57,9 +101,19 @@ header h1 { font-size:1.5rem; }
   box-shadow:0 10px 25px rgba(255,107,53,0.3);
   transition:0.3s;
 }
-.card:hover { transform:translateY(-4px); box-shadow:0 15px 35px rgba(255,107,53,0.5); }
-.card h3 { color:#FF6B35; font-weight:700; margin-bottom:0.5rem; }
-.card p { color:#ccc; margin-bottom:0.8rem; }
+.card:hover { 
+  transform:translateY(-4px); 
+  box-shadow:0 15px 35px rgba(255,107,53,0.5); 
+}
+.card h3 { 
+  color:#FF6B35; 
+  font-weight:700; 
+  margin-bottom:0.5rem; 
+}
+.card p { 
+  color:#ccc; 
+  margin-bottom:0.8rem; 
+}
 .card a {
   display:inline-block;
   background:#FF6B35;
@@ -71,11 +125,32 @@ header h1 { font-size:1.5rem; }
 }
 .card a:hover { background:#ff855c; }
 
+/* Tables */
+table {
+  width:100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+th, td {
+  border: 1px solid #FF6B35;
+  padding: 0.8rem;
+  text-align: left;
+}
+th {
+  background:#FF6B35;
+  color:#fff;
+}
+td {
+  background:#1a1a3a;
+  color:#ccc;
+}
+
 /* Responsive */
 @media(max-width:768px){
   body{flex-direction:column;}
   .sidebar{width:100%; flex-direction:row; justify-content:space-around; padding:1rem;}
   main{margin-left:0; padding:1rem;}
+  table, th, td { font-size: 0.9rem; }
 }
 </style>
 </head>
@@ -102,7 +177,46 @@ header h1 { font-size:1.5rem; }
 
   <div class="card">
     <h3>Flavour Food Supplier</h3>
-    <p><strong>Supplies:</strong> All food items listed in the Flavour Food Bites menu.</p>
+    <p><strong>Supplies:</strong> All food items listed in the Flavour Food Bites menu:</p>
+
+    <h4>Mains / Combo Meals</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Burger w/ fries & iced tea</td><td>₱100</td></tr>
+        <tr><td>Burger w/ fries & halohalo</td><td>₱100</td></tr>
+        <tr><td>Burger w/ fries & blue lemonade</td><td>₱100</td></tr>
+        <tr><td>Burger w/ fries & oreo shake</td><td>₱100</td></tr>
+        <tr><td>Burger w/ fries & milo dinasaur</td><td>₱100</td></tr>
+        <tr><td>Burger w/ fries & strawberry milk</td><td>₱100</td></tr>
+        <tr><td>Nachos fries & blue lemonade</td><td>₱100</td></tr>
+        <tr><td>Buy 1 take 1 Burger w/ fries</td><td>₱110</td></tr>
+        <tr><td>Carbonara</td><td>₱100</td></tr>
+        <tr><td>Shawarma fries</td><td>₱80</td></tr>
+      </tbody>
+    </table>
+
+    <h4>Drinks</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Iced tea</td><td>₱50</td></tr>
+        <tr><td>Milo Dinasaur</td><td>₱60</td></tr>
+        <tr><td>Halo halo</td><td>₱50</td></tr>
+        <tr><td>Caramel Macchiato</td><td>₱70</td></tr>
+      </tbody>
+    </table>
+
     <p><strong>Contact / Facebook:</strong></p>
     <a href="https://www.facebook.com/profile.php?id=100085494273839" target="_blank">
       <i class="ri-facebook-box-fill"></i> Visit Facebook Profile
