@@ -209,6 +209,29 @@ function renderOrders(){
       orders[idx].status = e.target.value;
       localStorage.setItem('orders', JSON.stringify(orders));
       renderOrders();
+
+ // ✅ NEW CODE: Send email to customer when status changes
+    try {
+      const response = await fetch('http://localhost:3000/send-status-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: orders[idx].customerEmail,  // make sure your order object has this field
+          name: orders[idx].customerName,
+          status: newStatus,
+          orderId: orders[idx].id || idx
+        })
+      });
+
+      if (response.ok) {
+        console.log(`📧 Email sent to ${orders[idx].customerEmail}`);
+      } else {
+        console.error('Failed to send email');
+      }
+    } catch (error) {
+      console.error('Error sending email:', error);
+    }
+
     });
   });
 
