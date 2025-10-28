@@ -202,15 +202,35 @@ function renderOrders(){
     ordersContainer.appendChild(box);
   });
 
-  // handle status change
-  ordersContainer.querySelectorAll('select').forEach(sel=>{
-    sel.addEventListener('change',e=>{
-      const idx = e.target.dataset.index;
-      orders[idx].status = e.target.value;
-      localStorage.setItem('orders', JSON.stringify(orders));
-      renderOrders();
-    });
+// handle status change + send Gmail notification
+ordersContainer.querySelectorAll('select').forEach(sel=>{
+  sel.addEventListener('change', async e=>{
+    const idx = e.target.dataset.index;
+    const order = orders[idx];
+    const newStatus = e.target.value;
+
+    order.status = newStatus;
+    localStorage.setItem('orders', JSON.stringify(orders));
+    renderOrders();
+
+    // 🔔 Send email notification through backend
+    try {
+      await fetch('/send-status-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: order.customerEmail, // customer's Gmail
+          name: order.customerName,   // customer's name
+          orderId: order.id,          // order number
+          status: newStatus           // new order status
+        })
+      });
+      console.log(`✅ Email sent for Order #${order.id}`);
+    } catch (err) {
+      console.error('❌ Failed to send email:', err);
+    }
   });
+});
 
   // handle remove button
   ordersContainer.querySelectorAll('.remove-btn').forEach(btn=>{
