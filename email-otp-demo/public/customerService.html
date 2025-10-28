@@ -1,57 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Customer Service</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Service Portal</title>
 <style>
-  /* Keep your existing CSS mostly unchanged */
-  * {margin:0; padding:0; box-sizing:border-box;}
-  :root {
-    --primary-color: #FF6B35;
-    --background: #0F0F23;
-    --background-light: #1a1a3a;
-    --text-primary: #FFFFFF;
-    --text-secondary: #B8BCC8;
-    --glass-bg: rgba(255,255,255,0.1);
-    --glass-border: rgba(255,255,255,0.2);
-    --gradient-primary: linear-gradient(135deg,#FF6B35 0%,#E55A2B 50%,#FF8A50 100%);
-  }
-  body {font-family:'Inter',sans-serif; background: var(--background); color: var(--text-primary); line-height:1.6; display:flex; flex-direction:column; min-height:100vh; overflow-x:hidden;}
-  header {position:fixed; top:0; left:0; right:0; background: rgba(15,15,35,0.9); backdrop-filter: blur(20px); border-bottom:1px solid var(--glass-border); z-index:1000;}
-  .navbar {display:flex; align-items:center; justify-content:space-between; padding:1rem 2rem; max-width:1400px; margin:0 auto;}
-  .logo-section {display:flex; align-items:center; gap:1rem;}
-  .logo {width:60px; height:60px; background:var(--gradient-primary); border-radius:16px; display:flex; align-items:center; justify-content:center; color:white; font-size:1.8rem; font-weight:bold; animation:logoFloat 3s ease-in-out infinite;}
-  @keyframes logoFloat {0%,100{transform:translateY(0);}50%{transform:translateY(-5px);}}
-  .brand-name {font-size:1.8rem; font-weight:800; background:var(--gradient-primary); -webkit-background-clip:text; -webkit-text-fill-color:transparent; letter-spacing:-1px;}
-  .nav-links {display:flex; list-style:none; gap:2rem;}
-  .nav-links a {text-decoration:none; color:var(--text-secondary); font-weight:600; padding:0.75rem 1.5rem; border-radius:12px; transition:all 0.3s ease; position:relative;}
-  .nav-links a span {position:relative; z-index:1;}
-  .nav-links a:hover, .nav-links a.active {color:var(--text-primary); transform:translateY(-2px);}
-  .main-container {flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding:140px 2rem 4rem; gap:2rem; width:100%;}
-  .login-container, .tickets-section {background:var(--glass-bg); backdrop-filter:blur(30px); border:1px solid var(--glass-border); border-radius:24px; padding:2rem; width:100%; max-width:600px;}
-  .login-header {text-align:center; margin-bottom:2rem;}
-  .login-logo {width:80px; height:80px; background:var(--gradient-primary); border-radius:20px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; color:white; margin:0 auto 1rem; animation:logoFloat 3s ease-in-out infinite;}
-  .login-title {font-size:2rem; font-weight:800; background:var(--gradient-primary); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:0.5rem;}
-  .login-subtitle {color:var(--text-secondary); font-size:1rem; margin-bottom:1.5rem;}
-  .login-form {display:flex; flex-direction:column; gap:1rem;}
-  .form-group {position:relative; display:flex; flex-direction:column;}
-  .form-label {color: var(--text-primary); font-weight:600; margin-bottom:0.25rem;}
-  .form-input, .form-textarea, .form-file {width:100%; padding:0.75rem 1rem; background: var(--background-light); border:1px solid var(--glass-border); border-radius:12px; color:var(--text-primary); font-size:1rem;}
-  .form-textarea {resize:none;}
-  .login-button {padding:1rem; background:var(--gradient-primary); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer; transition:all 0.3s ease;}
-  .tickets-section h2 {color:var(--gradient-primary); text-align:center; margin-bottom:1rem;}
-  .ticket-card {background:var(--background-light); border-radius:16px; padding:1rem; margin-bottom:1rem; display:flex; flex-direction:column; gap:0.5rem;}
-  .ticket-images {display:flex; flex-wrap:wrap; gap:0.5rem;}
-  .ticket-images img {max-width:100px; max-height:100px; object-fit:cover; border-radius:8px; cursor:pointer; transition:transform 0.2s;}
-  .ticket-images img:hover {transform:scale(1.1);}
-  /* Modal */
-  .modal {display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:10000;}
-  .modal img {max-width:90%; max-height:90%; border-radius:12px;}
-  .modal:target {display:flex;}
+:root {
+  --primary: #FF6B35;
+  --background: #0F0F23;
+  --background-light: #1a1a3a;
+  --text-primary: #FFF;
+  --text-secondary: #B8BCC8;
+  --glass-bg: rgba(255,255,255,0.1);
+  --glass-border: rgba(255,255,255,0.2);
+  --gradient: linear-gradient(135deg,#FF6B35 0%,#E55A2B 50%,#FF8A50 100%);
+}
+
+* {margin:0; padding:0; box-sizing:border-box;}
+body { font-family:'Inter', sans-serif; background:var(--background); color:var(--text-primary); display:flex; flex-direction:column; min-height:100vh;}
+
+header { position:fixed; top:0; left:0; right:0; background:rgba(15,15,35,0.9); backdrop-filter:blur(20px); border-bottom:1px solid var(--glass-border); z-index:1000;}
+.navbar { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; max-width:1400px; margin:0 auto;}
+.logo-section { display:flex; align-items:center; gap:1rem;}
+.logo { width:60px; height:60px; background:var(--gradient); border-radius:16px; display:flex; justify-content:center; align-items:center; font-size:1.8rem; font-weight:bold; animation: floatLogo 3s ease-in-out infinite;}
+@keyframes floatLogo {0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);} }
+.brand-name { font-size:1.8rem; font-weight:800; background:var(--gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.nav-links { display:flex; list-style:none; gap:1.5rem;}
+.nav-links a { text-decoration:none; color:var(--text-secondary); font-weight:600; padding:0.5rem 1rem; border-radius:12px; transition:all 0.3s ease;}
+.nav-links a:hover, .nav-links a.active { color:var(--text-primary); transform:translateY(-2px); }
+
+main { flex:1; margin-top:100px; display:flex; flex-direction:column; align-items:center; padding:2rem; gap:2rem; width:100%; }
+.form-container, .tickets-container { background:var(--glass-bg); backdrop-filter:blur(20px); border:1px solid var(--glass-border); border-radius:24px; padding:2rem; width:100%; max-width:600px; }
+h2 { text-align:center; margin-bottom:1rem; color:var(--primary); }
+.form-input, .form-textarea, .form-file { width:100%; padding:0.75rem 1rem; margin-bottom:1rem; border-radius:12px; border:1px solid var(--glass-border); background:var(--background-light); color:var(--text-primary); font-size:1rem;}
+.form-textarea { resize:none; }
+.submit-btn { width:100%; padding:1rem; border:none; border-radius:12px; background:var(--gradient); color:#fff; font-weight:700; cursor:pointer; transition:all 0.3s ease;}
+.submit-btn:hover { opacity:0.9; transform:translateY(-2px); }
+
+.ticket-card { background:var(--background-light); border-radius:16px; padding:1rem; margin-bottom:1rem; }
+.ticket-images { display:flex; flex-wrap:wrap; gap:0.5rem; }
+.ticket-images img { max-width:100px; max-height:100px; border-radius:8px; object-fit:cover; cursor:pointer; transition:transform 0.2s; }
+.ticket-images img:hover { transform:scale(1.1); }
+
+.modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:10000; }
+.modal img { max-width:90%; max-height:90%; border-radius:12px; }
+
+.chat-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:10000; }
+.chat-content { background:var(--background-light); border-radius:16px; padding:1rem; width:90%; max-width:400px; height:70%; display:flex; flex-direction:column; }
+#chat-box { flex:1; overflow-y:auto; background: rgba(255,255,255,0.05); padding:0.75rem; border-radius:8px; margin-bottom:0.5rem; }
+.chat-input-container { display:flex; gap:0.5rem; }
+.chat-input-container input[type=file]{ width:80px; }
+.ticket-chat-btn { margin-top:0.5rem; background:var(--gradient); color:#fff; font-weight:600; padding:0.5rem; border-radius:12px; cursor:pointer; border:none; width:100%; transition:all 0.3s ease; }
+.ticket-chat-btn:hover { opacity:0.9; transform:translateY(-2px); }
 </style>
 </head>
 <body>
+
 <header>
   <nav class="navbar">
     <div class="logo-section">
@@ -59,130 +63,178 @@
       <span class="brand-name">Customer Service</span>
     </div>
     <ul class="nav-links">
-      <li><a href="index.html"><span>Home</span></a></li>
-      <li><a href="menu.html"><span>Menu</span></a></li>
-      <li><a href="lcart.html"><span>Cart</span></a></li>
-      <li><a href="orders.html"><span>Orders</span></a></li>
-      <li><a href="reviews.html"><span>Reviews</span></a></li>
-      <li><a href="aboutus.html"><span>About Us</span></a></li>
-      <li><a href="customerService.html" class="active"><span>Customer Service</span></a></li>
-      <li><a href="login.html"><span>Logout</span></a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="customerService.html" class="active">Support</a></li>
+      <li><a href="login.html">Logout</a></li>
     </ul>
   </nav>
 </header>
 
-<main class="main-container">
-  <!-- Contact Form -->
-  <div class="login-container">
-    <div class="login-header">
-      <div class="login-logo">💬</div>
-      <h1 class="login-title">Need Help?</h1>
-      <p class="login-subtitle">Submit your complaint with optional proof images</p>
-    </div>
-    <form class="login-form" id="cs-form">
-      <div class="form-group">
-        <label class="form-label" for="name">Full Name</label>
-        <input type="text" id="name" class="form-input" placeholder="Enter your name" required />
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="email">Email Address</label>
-        <input type="email" id="email" class="form-input" placeholder="Enter your email" required />
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="subject">Subject</label>
-        <input type="text" id="subject" class="form-input" placeholder="Enter subject" required />
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="message">Message</label>
-        <textarea id="message" class="form-textarea" placeholder="Write your message..." rows="5" required></textarea>
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="images">Attach Images (1-5)</label>
-        <input type="file" id="images" class="form-file" accept="image/*" multiple />
-      </div>
-      <button type="submit" class="login-button">Send Message</button>
+<main>
+  <div class="form-container">
+    <h2>Submit a Ticket</h2>
+    <form id="ticket-form">
+      <input type="text" id="name" class="form-input" placeholder="Full Name" required>
+      <input type="email" id="email" class="form-input" placeholder="Email" required>
+      <input type="text" id="subject" class="form-input" placeholder="Subject" required>
+      <textarea id="message" class="form-textarea" rows="5" placeholder="Message" required></textarea>
+      <input type="file" id="images" class="form-file" accept="image/*" multiple>
+      <button type="submit" class="submit-btn">Send Ticket</button>
     </form>
   </div>
 
-  <!-- Tickets Section -->
-  <div class="tickets-section">
+  <div class="tickets-container">
     <h2>My Tickets</h2>
-    <div id="customer-tickets"></div>
+    <div id="tickets-list"></div>
+  </div>
+
+  <div id="chat-modal" class="chat-modal">
+    <div class="chat-content">
+      <h3 style="text-align:center;">Live Chat</h3>
+      <div id="chat-box"></div>
+      <div class="chat-input-container">
+        <input type="text" id="chat-input" placeholder="Type a message...">
+        <input type="file" id="chat-files" accept="image/*" multiple>
+        <button id="send-chat" class="submit-btn">Send</button>
+      </div>
+      <button id="download-chat" class="submit-btn" style="margin-top:0.5rem;">💾 Download Chat</button>
+    </div>
   </div>
 </main>
 
-<!-- Modal for image preview -->
-<div id="image-modal" class="modal" onclick="this.style.display='none'">
-  <img id="modal-img" src="">
-</div>
-
-<footer>
-  <p>&copy; 2025 Customer Service Portal. All rights reserved.</p>
-</footer>
+<div id="image-modal" class="modal"><img id="modal-img" src=""></div>
 
 <script>
-const form = document.getElementById('cs-form');
-const ticketsContainer = document.getElementById('customer-tickets');
-
-// Convert image files to base64
-function readFilesAsDataURL(files){
-  return Promise.all([...files].slice(0,5).map(file => {
-    return new Promise(resolve=>{
+// Helpers
+async function readFiles(files){
+  return Promise.all([...files].slice(0,5).map(f=>{
+    return new Promise(r=>{
       const reader = new FileReader();
-      reader.onload = e => resolve(e.target.result);
-      reader.readAsDataURL(file);
+      reader.onload = e => r(e.target.result);
+      reader.readAsDataURL(f);
     });
   }));
 }
 
-// Submit ticket
+function openImage(src){ 
+  document.getElementById('modal-img').src = src; 
+  document.getElementById('image-modal').style.display = 'flex'; 
+}
+
+// Tickets
+const form = document.getElementById('ticket-form');
+const ticketsList = document.getElementById('tickets-list');
+let currentTicket = null;
+
+function renderTickets(){
+  const tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
+  ticketsList.innerHTML = '';
+  tickets.forEach(t=>{
+    const div = document.createElement('div');
+    div.className = 'ticket-card';
+    div.innerHTML = `
+      <h4>${t.subject}</h4>
+      <p>${t.message}</p>
+      ${t.images.length ? `<div class="ticket-images">${t.images.map(img=>`<img src="${img}" onclick="openImage('${img}')">`).join('')}</div>` : ''}
+      <p><strong>Status:</strong> ${t.status}</p>
+      <button class="ticket-chat-btn" onclick="openChat('${t.id}')">💬 Contact Agent</button>
+    `;
+    ticketsList.appendChild(div);
+  });
+}
+
 form.addEventListener('submit', async e=>{
   e.preventDefault();
-  let tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
-  const imagesInput = document.getElementById('images');
-  const images = await readFilesAsDataURL(imagesInput.files);
-  const newTicket = {
+  const tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
+  const imgs = await readFiles(document.getElementById('images').files);
+  const ticket = {
     id: Date.now(),
     name: document.getElementById('name').value,
     email: document.getElementById('email').value,
     subject: document.getElementById('subject').value,
     message: document.getElementById('message').value,
-    images: images,
+    images: imgs,
     status: 'pending'
   };
-  tickets.push(newTicket);
+  tickets.push(ticket);
   localStorage.setItem('tickets', JSON.stringify(tickets));
   form.reset();
-  renderCustomerTickets();
+  renderTickets();
   alert('Ticket submitted successfully!');
 });
 
-// Render tickets live
-function renderCustomerTickets(){
-  const tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
-  ticketsContainer.innerHTML = '';
-  tickets.forEach(ticket=>{
+renderTickets();
+
+// Chat
+const chatModal = document.getElementById('chat-modal');
+const chatBox = document.getElementById('chat-box');
+const chatInput = document.getElementById('chat-input');
+const chatFiles = document.getElementById('chat-files');
+const sendChatBtn = document.getElementById('send-chat');
+const downloadChatBtn = document.getElementById('download-chat');
+
+function renderChat(){
+  if(!currentTicket) return;
+  const chatHistory = JSON.parse(localStorage.getItem(`live_chat_${currentTicket}`) || '[]');
+  chatBox.innerHTML = '';
+  chatHistory.forEach(msg=>{
+    let content = '';
+    if(msg.text) content += `<span style="background:${msg.sender==='customer'?'var(--gradient)':'#444'}; padding:0.5rem; border-radius:12px; color:white; display:inline-block; max-width:70%;">${msg.text}</span>`;
+    if(msg.images) content += msg.images.map(img=>`<br><img src="${img}" onclick="openImage('${img}')" style="max-width:80px; max-height:80px; border-radius:8px; margin-top:0.3rem;">`).join('');
     const div = document.createElement('div');
-    div.className = 'ticket-card';
-    div.innerHTML = `
-      <h4>${ticket.subject}</h4>
-      <p>${ticket.message}</p>
-      ${ticket.images.length>0 ? `<div class="ticket-images">${ticket.images.map((img,i)=>`<img src="${img}" onclick="openModal('${img}')" />`).join('')}</div>` : ''}
-      <p><strong>Status:</strong> <span class="ticket-status">${ticket.status.replace('_',' ')}</span></p>
-    `;
-    ticketsContainer.appendChild(div);
+    div.style.textAlign = msg.sender==='customer'?'right':'left';
+    div.style.margin = '0.3rem 0';
+    div.innerHTML = content;
+    chatBox.appendChild(div);
   });
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// Modal function
-function openModal(src){
-  document.getElementById('modal-img').src = src;
-  document.getElementById('image-modal').style.display = 'flex';
+async function addChatMessage(sender){
+  if(!currentTicket) return;
+  const text = chatInput.value.trim();
+  if(!text && !chatFiles.files.length) return;
+  const imgs = await readFiles(chatFiles.files);
+  const key = `live_chat_${currentTicket}`;
+  const chatHistory = JSON.parse(localStorage.getItem(key) || '[]');
+  chatHistory.push({ticket: currentTicket, sender, text, images: imgs, time: Date.now()});
+  localStorage.setItem(key, JSON.stringify(chatHistory));
+  chatInput.value=''; chatFiles.value='';
+  renderChat();
 }
 
-// Live update every 2s
-renderCustomerTickets();
-setInterval(renderCustomerTickets,2000);
+function openChat(ticketId){
+  currentTicket = ticketId;
+  chatModal.style.display='flex';
+  renderChat();
+}
+
+sendChatBtn.addEventListener('click', ()=>addChatMessage('customer'));
+chatModal.addEventListener('click', e=>{ if(e.target===chatModal) chatModal.style.display='none'; });
+
+downloadChatBtn.addEventListener('click', ()=>{
+  if(!currentTicket) return;
+  const key = `live_chat_${currentTicket}`;
+  const chatHistory = JSON.parse(localStorage.getItem(key) || '[]');
+  let content = '=== Chat History ===\n';
+  chatHistory.forEach(msg=>{
+    content += `${msg.sender==='customer'?'You':'Agent'}: ${msg.text||''}\n`;
+    if(msg.images) msg.images.forEach((img,i)=>content += `[Image ${i+1} Attached]\n`);
+  });
+  const blob = new Blob([content], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `chat_${Date.now()}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>document.body.removeChild(a),100);
+});
+
+// Auto-update tickets & chat
+setInterval(()=>{
+  renderTickets();
+  renderChat();
+},1000);
 </script>
 </body>
 </html>

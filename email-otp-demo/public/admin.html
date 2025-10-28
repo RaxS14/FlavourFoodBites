@@ -3,93 +3,70 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard — COFFEE & BLOOM</title>
+<title>Admin Dashboard — Customer Service</title>
 
-<!-- Fonts & Icons -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
 
 <style>
 * { box-sizing: border-box; margin:0; padding:0; }
-body {
-  font-family: 'Poppins', sans-serif;
-  background:#0F0F23; color:#fff; 
-  display:flex; height:100vh; overflow:hidden; 
-}
+body { font-family: 'Poppins', sans-serif; background:#0F0F23; color:#fff; display:flex; height:100vh; overflow:hidden; }
 
 /* Sidebar */
-.sidebar {
-  width:260px; background:#1a1a3a; padding:2rem 1rem;
-  display:flex; flex-direction:column; align-items:center; box-shadow:2px 0 15px rgba(0,0,0,0.2);
-  position:fixed; height:100%;
-}
+.sidebar { width:260px; background:#1a1a3a; padding:2rem 1rem; display:flex; flex-direction:column; align-items:center; position:fixed; height:100%; box-shadow:2px 0 15px rgba(0,0,0,0.2); }
 .sidebar img { width:80px; height:80px; border-radius:50%; object-fit:cover; }
 .sidebar h2 { margin-top:0.5rem; font-size:1.3rem; color:#FF6B35; }
 .sidebar p { font-size:0.9rem; color:#aaa; margin-bottom:2rem; }
 .sidebar .nav { list-style:none; width:100%; }
 .sidebar .nav li { margin:0.3rem 0; }
-.sidebar .nav a {
-  display:flex; align-items:center;
-  text-decoration:none; color:#fff; 
-  padding:0.7rem 1rem; border-radius:10px;
-  transition:all 0.3s ease;
-}
+.sidebar .nav a { display:flex; align-items:center; text-decoration:none; color:#fff; padding:0.7rem 1rem; border-radius:10px; transition:0.3s; }
 .sidebar .nav a i { margin-right:10px; font-size:1.2rem; }
-.sidebar .nav a.active, .sidebar .nav a:hover {
-  background:#FF6B35; color:#fff; font-weight:600;
-}
+.sidebar .nav a.active, .sidebar .nav a:hover { background:#FF6B35; font-weight:600; }
 
 /* Main */
-main {
-  flex:1; margin-left:260px; padding:2rem; overflow-y:auto;
-}
-header {
-  background:#1a1a3a; color:#fff; padding:1rem 1.5rem;
-  border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.3);
-  margin-bottom:2rem; display:flex; justify-content:space-between; align-items:center;
-}
+main { flex:1; margin-left:260px; padding:2rem; display:flex; flex-direction:column; overflow-y:auto; }
+header { background:#1a1a3a; color:#fff; padding:1rem 1.5rem; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.3); margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center; }
 header h1 { font-size:1.5rem; }
-.refresh-indicator {
-  font-size:0.9rem; background: rgba(255,255,255,0.2);
-  padding:0.4rem 0.8rem; border-radius:10px; animation:pulse 2s infinite;
-}
+.refresh-indicator { font-size:0.9rem; background: rgba(255,255,255,0.2); padding:0.4rem 0.8rem; border-radius:10px; animation:pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:0.6;} 50%{opacity:1;} }
 
-/* Cards */
-h2 {
-  font-size:1.3rem; margin-bottom:1rem; color:#FF6B35;
-  border-bottom:3px solid #FF8C69; display:inline-block; padding-bottom:0.3rem;
-}
-.card {
-  border-radius:20px; padding:1.2rem; margin-bottom:1.5rem; 
-  background:#1a1a3a; box-shadow:0 10px 25px rgba(255, 107, 53,0.3);
-  transition:0.3s; display:flex; gap:1rem; flex-direction:column;
-}
-.card:hover { transform:translateY(-4px); box-shadow:0 15px 35px rgba(255,107,53,0.5); }
-.card img { width:60px; height:60px; border-radius:6px; object-fit:cover; cursor:pointer; }
-.card h3 { margin-bottom:0.5rem; font-weight:700; color:#FF6B35; }
+/* Sections */
+section { margin-bottom:2rem; }
+h2 { font-size:1.3rem; margin-bottom:1rem; color:#FF6B35; border-bottom:3px solid #FF8C69; display:inline-block; padding-bottom:0.3rem; }
+
+/* Tickets */
+.card { background:#1a1a3a; border-radius:20px; padding:1rem; margin-bottom:1rem; box-shadow:0 10px 25px rgba(255,107,53,0.3); display:flex; flex-direction:column; gap:0.5rem; }
+.card h3 { color:#FF6B35; margin-bottom:0.3rem; }
 .card p { margin-bottom:0.3rem; }
-.card select { margin-top:5px; padding:4px 6px; border-radius:6px; border:none; background:#0F0F23; color:#fff; }
-.card button { margin-top:5px; padding:4px 8px; background:#FF6B35; border:none; color:#fff; border-radius:6px; cursor:pointer; }
+.card select { margin-top:5px; padding:4px 6px; border-radius:6px; border:none; background:#0F0F23; color:#fff; cursor:pointer; }
+.status-pending { background-color:#2a2a40; }
+.status-inprogress { background-color:#2a3a5a; }
+.status-resolved { background-color:#3a5a3a; cursor:not-allowed; }
+.card .remove-btn { background:#FF6B35; color:#fff; border:none; padding:5px 8px; border-radius:8px; cursor:pointer; align-self:flex-end; margin-top:5px; }
 
-/* Ticket status colors */
-.status-pending { background-color: #2a2a40; }
-.status-inprogress { background-color: #2a3a5a; }
-.status-resolved { background-color: #3a5a3a; }
+/* Images */
+.card .ticket-images { display:flex; flex-wrap:wrap; gap:5px; margin-top:5px; }
+.card .ticket-images img { width:80px; height:80px; object-fit:cover; border-radius:8px; cursor:pointer; transition:transform 0.2s; }
+.card .ticket-images img:hover { transform:scale(1.1); }
 
-/* Lightbox */
-#lightbox {
-  display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-  background: rgba(0,0,0,0.85); justify-content:center; align-items:center; z-index:9999;
-}
-#lightbox img { max-width:90%; max-height:90%; border-radius:12px; }
+/* Chat */
+.chat-container { display:flex; flex-direction:column; background:#1a1a3a; border-radius:12px; padding:10px; max-height:300px; overflow-y:auto; gap:8px; border:1px solid #444; }
+.chat-message { padding:8px 12px; border-radius:12px; max-width:70%; word-wrap:break-word; font-size:0.95rem; position:relative; }
+.chat-message.customer { background:#2b2b3a; align-self:flex-start; }
+.chat-message.admin { background:#FF6B35; align-self:flex-end; }
+.chat-time { font-size:0.7rem; color:#aaa; margin-top:2px; text-align:right; }
+.chat-input { display:flex; gap:5px; margin-top:5px; }
+.chat-input input { flex:1; padding:8px 12px; border-radius:12px; border:none; background:#0F0F23; color:#fff; }
+.chat-input button { padding:8px 12px; border-radius:12px; border:none; background:#FF6B35; cursor:pointer; }
 
-@media(max-width:768px){
-  body{flex-direction:column;}
-  .sidebar{width:100%; flex-direction:row; justify-content:space-around; padding:1rem;}
-  main{margin-left:0; padding:1rem;}
-  .card{align-items:center; text-align:center;}
-}
+/* Active ticket header */
+#activeTicketHeader { margin-bottom:0.5rem; font-weight:600; color:#FF6B35; }
+
+/* Modal */
+#imageModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:10000; }
+#imageModal img { max-width:90%; max-height:90%; border-radius:12px; }
+
+@media(max-width:768px){ body { flex-direction:column; } .sidebar { width:100%; flex-direction:row; justify-content:space-around; padding:1rem; } main { margin-left:0; padding:1rem; } }
 </style>
 </head>
 <body>
@@ -99,110 +76,149 @@ h2 {
   <h2>Admin</h2>
   <p>Administrator</p>
   <ul class="nav">
-    <li><a href="admin.html" class="active"><i class="ri-dashboard-line"></i> Dashboard</a></li>
-    <li><a href="adminorder.html"><i class="ri-shopping-bag-3-line"></i> Orders</a></li>
-    <li><a href="inventory.html"><i class="ri-archive-2-line"></i> Inventory</a></li>
-    <li><a href="suppliers.html"><i class="ri-truck-line"></i> Suppliers</a></li>
-    <li><a href="reports.html"><i class="ri-bar-chart-2-line"></i> Reports</a></li>
+    <li><a href="#" class="active"><i class="ri-dashboard-line"></i> Dashboard</a></li>
+    <li><a href="#"><i class="ri-shopping-bag-3-line"></i> Orders</a></li>
+    <li><a href="#"><i class="ri-archive-2-line"></i> Inventory</a></li>
+    <li><a href="#"><i class="ri-truck-line"></i> Suppliers</a></li>
+    <li><a href="#"><i class="ri-bar-chart-2-line"></i> Reports</a></li>
     <li><a href="#" id="logoutLink"><i class="ri-logout-circle-line"></i> Logout</a></li>
   </ul>
 </aside>
 
 <main>
   <header>
-    <h1>Customer Service Tickets</h1>
+    <h1>Customer Service Dashboard</h1>
     <span class="refresh-indicator">Live updates 🔄</span>
   </header>
 
-  <div id="ticketsContainer"></div>
+  <section>
+    <h2>Tickets</h2>
+    <div id="ticketsContainer"></div>
+  </section>
+
+  <section>
+    <h2>Live Chat</h2>
+    <div id="activeTicketHeader"></div>
+    <div class="chat-container" id="chatBox"></div>
+    <div class="chat-input">
+      <input type="text" id="adminMessage" placeholder="Type a message..." />
+      <button id="sendBtn">Send</button>
+    </div>
+  </section>
 </main>
 
-<div id="lightbox"><img src="" alt="Attachment"></div>
+<div id="imageModal" onclick="this.style.display='none'"><img src=""></div>
 
 <script>
 const ticketsContainer = document.getElementById('ticketsContainer');
-const lightbox = document.getElementById('lightbox');
-const lightboxImg = lightbox.querySelector('img');
+const chatBox = document.getElementById('chatBox');
+const adminMessage = document.getElementById('adminMessage');
+const sendBtn = document.getElementById('sendBtn');
+const imageModal = document.getElementById('imageModal');
+const modalImg = imageModal.querySelector('img');
+const activeTicketHeader = document.getElementById('activeTicketHeader');
 
 let tickets = JSON.parse(localStorage.getItem('tickets')) || [];
-let lastTicketsJSON = JSON.stringify(tickets);
+let activeTicketId = null;
 
-function getStatusClass(status){
-  switch(status.toLowerCase()){
-    case 'pending': return 'status-pending';
-    case 'in progress': case 'in_progress': return 'status-inprogress';
-    case 'resolved': return 'status-resolved';
-    default: return 'status-pending';
-  }
+// Show ticket image
+function showModal(src) {
+  modalImg.src = src;
+  imageModal.style.display = 'flex';
 }
 
-function renderTickets(){
-  ticketsContainer.innerHTML='';
-  if(tickets.length===0){ ticketsContainer.innerHTML='<p>No tickets yet.</p>'; return; }
+// Render tickets
+function renderTickets() {
+  ticketsContainer.innerHTML = '';
+  if (!tickets.length) {
+    ticketsContainer.innerHTML = '<p>No tickets yet.</p>';
+    return;
+  }
 
-  tickets.forEach((ticket,index)=>{
-    const imagesHTML = ticket.images?.map((img,idx)=>`<img src="${img}" data-index="${idx}">`).join('')||'';
-    const statusOptions = ['Pending','In Progress','Resolved'];
-    let statusHTML = `<select data-index="${index}">`;
-    statusOptions.forEach(opt=>statusHTML+=`<option value="${opt}" ${ticket.status===opt?'selected':''}>${opt}</option>`);
-    statusHTML += '</select>';
-
-    const box = document.createElement('div');
-    box.className = `card ${getStatusClass(ticket.status||'Pending')}`;
-    box.innerHTML = `
-      <h3>${ticket.name} - ${ticket.contact}</h3>
+  tickets.forEach(ticket => {
+    const card = document.createElement('div');
+    card.className = `card status-${ticket.status?.toLowerCase() || 'pending'}`;
+    card.innerHTML = `
+      <h3>${ticket.name} - ${ticket.subject}</h3>
       <p>Email: ${ticket.email}</p>
       <p>Message: ${ticket.message}</p>
-      <p>Attachments: ${imagesHTML}</p>
-      <p>Status: ${statusHTML}</p>
-      <p><small>Submitted: ${new Date(ticket.timestamp).toLocaleString()}</small></p>
-      <button data-index="${index}">Remove ❌</button>
+      ${ticket.images?.length ? `<div class="ticket-images">${ticket.images.map(img => `<img src="${img}" onclick="showModal('${img}')">`).join('')}</div>` : ''}
+      <button class="contact-btn" data-id="${ticket.id}">Contact Customer</button>
+      <button class="remove-btn" data-id="${ticket.id}">Remove Ticket</button>
     `;
-    ticketsContainer.appendChild(box);
+    ticketsContainer.appendChild(card);
   });
 
-  ticketsContainer.querySelectorAll('select').forEach(sel=>{
-    sel.addEventListener('change',e=>{
-      const idx = e.target.dataset.index;
-      tickets[idx].status = e.target.value;
+  ticketsContainer.querySelectorAll('.contact-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      activeTicketId = e.target.dataset.id;
+      const ticket = tickets.find(t => t.id == activeTicketId);
+      activeTicketHeader.textContent = `Chatting with: ${ticket.name}`;
+      renderChat();
+    });
+  });
+
+  ticketsContainer.querySelectorAll('.remove-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      tickets = tickets.filter(t => t.id != e.target.dataset.id);
       localStorage.setItem('tickets', JSON.stringify(tickets));
-      renderTickets();
-    });
-  });
-
-  ticketsContainer.querySelectorAll('button').forEach(btn=>{
-    btn.addEventListener('click',e=>{
-      const idx = e.target.dataset.index;
-      if(confirm('Remove this ticket?')){
-        tickets.splice(idx,1);
-        localStorage.setItem('tickets', JSON.stringify(tickets));
-        renderTickets();
+      if (activeTicketId === e.target.dataset.id) {
+        activeTicketId = null;
+        activeTicketHeader.textContent = '';
       }
-    });
-  });
-
-  ticketsContainer.querySelectorAll('img').forEach(img=>{
-    img.addEventListener('click',e=>{
-      lightboxImg.src = e.target.src;
-      lightbox.style.display='flex';
+      renderTickets();
+      renderChat();
     });
   });
 }
 
-lightbox.addEventListener('click',()=>{ lightbox.style.display='none'; });
-
-function liveUpdate(){
-  const currentTickets = JSON.parse(localStorage.getItem('tickets'))||[];
-  if(JSON.stringify(currentTickets)!==lastTicketsJSON){ tickets=currentTickets; lastTicketsJSON=JSON.stringify(tickets); renderTickets(); }
+// Render chat per ticket
+function renderChat() {
+  if (!activeTicketId) {
+    chatBox.innerHTML = '<p>Select a ticket to start chat.</p>';
+    return;
+  }
+  const chat = JSON.parse(localStorage.getItem('live_chat_' + activeTicketId) || '[]');
+  chatBox.innerHTML = '';
+  chat.forEach(msg => {
+    const div = document.createElement('div');
+    div.className = `chat-message ${msg.sender}`;
+    div.innerHTML = `${msg.text || ''}<div class="chat-time">${new Date(msg.time).toLocaleTimeString()}</div>`;
+    chatBox.appendChild(div);
+  });
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
-setInterval(liveUpdate,1000);
 
-renderTickets();
+// Admin sends message to customer
+sendBtn.addEventListener('click', () => {
+  if (!activeTicketId) return alert("Select a ticket first.");
+  const text = adminMessage.value.trim();
+  if (!text) return;
+  const chatKey = 'live_chat_' + activeTicketId;
+  const chat = JSON.parse(localStorage.getItem(chatKey) || '[]');
+  chat.push({ sender: 'admin', text, time: Date.now() });
+  localStorage.setItem(chatKey, JSON.stringify(chat));
+  adminMessage.value = '';
+  renderChat();
+});
+
+// Simulate real-time: check for new customer messages every second
+setInterval(() => {
+  tickets = JSON.parse(localStorage.getItem('tickets')) || tickets;
+  renderTickets();
+  renderChat();
+}, 1000);
 
 // Logout
-document.getElementById('logoutLink').addEventListener('click',e=>{
-  e.preventDefault(); localStorage.clear(); window.location.href='login.html';
+document.getElementById('logoutLink').addEventListener('click', e => {
+  e.preventDefault();
+  localStorage.clear();
+  window.location.href = 'login.html';
 });
+
+// Initial render
+renderTickets();
+renderChat();
 </script>
 
 </body>
