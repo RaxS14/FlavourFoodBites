@@ -83,6 +83,23 @@ header { position:fixed; top:0; left:0; right:0; background:rgba(15,15,35,0.9); 
 .modal.active { display:flex; }
 .modal-content { background:#1a1a3a; border-radius:16px; padding:1rem; position:relative; }
 .modal-content img { max-width:90vw; max-height:90vh; border-radius:12px; }
+
+/* 🔔 Toast Notification */
+#toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--gradient-primary);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(255,107,53,0.4);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+  z-index: 9999;
+  font-weight: 600;
+}
 </style>
 </head>
 <body>
@@ -137,14 +154,31 @@ header { position:fixed; top:0; left:0; right:0; background:rgba(15,15,35,0.9); 
   </div>
 </div>
 
+<!-- 🔔 Toast Notification -->
+<div id="toast"></div>
+
 <script>
 const ordersList = document.getElementById('ordersList');
 const receiptModal = document.getElementById('receiptModal');
 const receiptImg = document.getElementById('receiptImg');
 const receiptClose = document.getElementById('receiptClose');
 
+// 🔔 Toast function
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.style.opacity = '1';
+  toast.style.transform = 'translateY(0)';
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(20px)';
+  }, 3000);
+}
+
 let orders = JSON.parse(localStorage.getItem('orders') || '[]');
 let lastOrdersJSON = JSON.stringify(orders);
+let lastStatuses = {};
+orders.forEach(o => lastStatuses[o.id] = o.status);
 
 const statusClasses = {
   pending:'status-pending',
@@ -255,7 +289,16 @@ window.onclick=e=>{if(e.target==receiptModal) receiptModal.classList.remove('act
 setInterval(()=>{
   let currentOrdersJSON = localStorage.getItem('orders') || '[]';
   if(currentOrdersJSON !== lastOrdersJSON){
-    orders = JSON.parse(currentOrdersJSON);
+    let newOrders = JSON.parse(currentOrdersJSON);
+
+    newOrders.forEach(o=>{
+      if(lastStatuses[o.id] && lastStatuses[o.id] !== o.status){
+        showToast(`Your Order #${o.id} is now ${o.status.toUpperCase()}!`);
+      }
+      lastStatuses[o.id] = o.status;
+    });
+
+    orders = newOrders;
     renderOrders(document.querySelector('.filter-tab.active')?.dataset.filter || 'all');
     lastOrdersJSON = currentOrdersJSON;
   }
