@@ -213,22 +213,22 @@ ordersContainer.querySelectorAll('select').forEach(sel=>{
     localStorage.setItem('orders', JSON.stringify(orders));
     renderOrders();
 
-    // 🔔 Send email notification through backend
-    try {
-      await fetch('/send-status-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: order.customerEmail, // customer's Gmail
-          name: order.customerName,   // customer's name
-          orderId: order.id,          // order number
-          status: newStatus           // new order status
-        })
-      });
-      console.log(`✅ Email sent for Order #${order.id}`);
-    } catch (err) {
-      console.error('❌ Failed to send email:', err);
-    }
+// 🔔 Send email notification through backend
+try {
+  await fetch('/notify-status', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: order.customerEmail, // customer's Gmail
+      name: order.customerName,   // customer's name
+      orderId: order.id,          // order number
+      status: newStatus           // new order status
+    })
+  });
+  console.log(`✅ Email sent for Order #${order.id}`);
+} catch (err) {
+  console.error('❌ Failed to send email:', err);
+}
   });
 });
 
