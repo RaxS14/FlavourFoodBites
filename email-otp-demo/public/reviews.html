@@ -57,6 +57,14 @@ header{position:fixed;top:0;left:0;right:0;background:rgba(15,15,35,0.9);
 .review-item .stars i{color:var(--primary);}
 .review-item .reviewer{font-weight:700;margin-top:0.5rem;color:var(--text);}
 .review-item .comment{color:var(--text-secondary);margin-top:0.3rem;}
+.review-item img{margin-top:0.8rem;max-width:120px;border-radius:8px;cursor:pointer;
+  transition:transform 0.2s;display:block;}
+.review-item img:hover{transform:scale(1.05);}
+
+/* Lightbox */
+#lightbox{display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.8);justify-content:center;align-items:center;z-index:3000;}
+#lightbox img{max-width:90%;max-height:90%;border-radius:12px;}
 
 /* Empty message */
 .empty-message{text-align:center;color:var(--text-secondary);font-size:1.2rem;margin-top:3rem;
@@ -72,10 +80,11 @@ header{position:fixed;top:0;left:0;right:0;background:rgba(15,15,35,0.9);
 .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);
   justify-content:center;align-items:center;z-index:2000;}
 .modal-content{background:var(--bg-light);padding:2rem;border-radius:16px;border:1px solid var(--glass-border);
-  width:90%;max-width:400px;text-align:center;}
+  width:90%;max-width:400px;text-align:center;position:relative;}
 .modal-content h2{color:var(--primary);margin-bottom:1rem;}
 .modal-content input,.modal-content textarea{width:100%;margin:0.5rem 0;padding:0.75rem;border-radius:8px;
   border:1px solid var(--glass-border);background:var(--glass);color:var(--text);}
+.modal-content input[type=file]{color:var(--text-secondary);}
 .modal-content button{margin-top:1rem;padding:0.75rem 1.5rem;border:none;border-radius:8px;cursor:pointer;
   background:var(--gradient-primary);color:#fff;font-weight:600;}
 .modal-content button:hover{opacity:0.9;}
@@ -144,9 +153,13 @@ footer a{color:var(--primary);text-decoration:none;font-weight:600;}
       <i class="fa-solid fa-star" data-value="5"></i>
     </div>
     <textarea id="reviewText" rows="4" placeholder="Write your feedback..."></textarea>
+    <input type="file" id="reviewImage" accept="image/*">
     <button id="submitReview">Submit</button>
   </div>
 </div>
+
+<!-- Lightbox -->
+<div id="lightbox"><img src="" alt="Review image"></div>
 
 <footer>
   &copy; 2025 Flavour Food Bites. All rights reserved. <br>
@@ -161,10 +174,13 @@ const starEls=document.querySelectorAll("#starRating i");
 let selectedRating=0;
 const reviewList=document.getElementById("reviewList");
 const emptyMsg=document.getElementById("emptyMessage");
+const lightbox=document.getElementById("lightbox");
+const lightboxImg=lightbox.querySelector("img");
 
 openModal.onclick=()=>modal.style.display="flex";
 closeModal.onclick=()=>modal.style.display="none";
 window.onclick=(e)=>{if(e.target==modal)modal.style.display="none";};
+lightbox.onclick=()=>lightbox.style.display="none";
 
 starEls.forEach(star=>{
   star.addEventListener("click",()=>{
@@ -186,7 +202,12 @@ function loadReviews(){
       <div class="stars">${"★".repeat(r.rating)}${"☆".repeat(5-r.rating)}</div>
       <div class="reviewer">${r.name||"Anonymous"}</div>
       <div class="comment">${r.text}</div>
+      ${r.image?`<img src="${r.image}" alt="Review Image">`:''}
     `;
+    const imgEl=div.querySelector("img");
+    if(imgEl){
+      imgEl.addEventListener("click",()=>{lightboxImg.src=r.image;lightbox.style.display="flex";});
+    }
     reviewList.appendChild(div);
   });
   updateStats();
@@ -206,18 +227,34 @@ function updateStats(){
 document.getElementById("submitReview").onclick=()=>{
   const name=document.getElementById("reviewerName").value.trim();
   const text=document.getElementById("reviewText").value.trim();
+  const imageInput=document.getElementById("reviewImage");
   if(selectedRating===0||text===""){alert("Please select a rating and write your feedback.");return;}
-  const newReview={name,rating:parseInt(selectedRating),text};
+
+  const file=imageInput.files[0];
+  if(file){
+    const reader=new FileReader();
+    reader.onload=function(e){
+      saveReview(name,text,selectedRating,e.target.result);
+    };
+    reader.readAsDataURL(file);
+  }else{
+    saveReview(name,text,selectedRating,null);
+  }
+};
+
+function saveReview(name,text,rating,image){
+  const newReview={name,rating:parseInt(rating),text,image};
   const data=JSON.parse(localStorage.getItem("reviews")||"[]");
   data.push(newReview);
   localStorage.setItem("reviews",JSON.stringify(data));
   document.getElementById("reviewerName").value="";
   document.getElementById("reviewText").value="";
+  document.getElementById("reviewImage").value="";
   selectedRating=0;
   starEls.forEach(s=>s.classList.remove("active"));
   modal.style.display="none";
   loadReviews();
-};
+}
 
 loadReviews();
 </script>
