@@ -6,13 +6,25 @@
 <title>Track Delivery - Flavour Food Bites</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <style>
-  body { margin:0; font-family:'Inter',sans-serif; background:#0F0F23; color:#fff; }
-  #map { width:100vw; height:100vh; }
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #0F0F23;
+    color: #fff;
+  }
+  #map { width: 100vw; height: 100vh; }
   .motorcycle-emoji { font-size: 30px; }
   .back-btn {
-    position: absolute; top: 15px; left: 15px; z-index:1000;
-    background:#FF6B35; border:none; color:#fff; padding:0.5rem 1rem;
-    border-radius:12px; cursor:pointer; font-weight:600;
+    position: absolute;
+    top: 15px; left: 15px;
+    z-index: 1000;
+    background: #FF6B35;
+    border: none;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
   }
 </style>
 </head>
@@ -25,25 +37,23 @@
 <script>
 const ORS_API_KEY = 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjA5MDUyYzIyYzc4NDRhMTBiZjE3M2I1NGRlYmFmMTNiIiwiaCI6Im11cm11cjY0In0=';
 
-// Business location
+// --- Business + delivery coordinates ---
 const BUSINESS = { lat: 10.2583, lng: 123.8167 };
-
-// Buyer location from localStorage
 const savedDelivery = JSON.parse(localStorage.getItem('deliveryLocation'));
 const DELIVERY = savedDelivery || { lat: 10.2600, lng: 123.8200 };
 
+// --- Map setup ---
 const map = L.map('map').setView([BUSINESS.lat, BUSINESS.lng], 15);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
-// Business marker
+// --- Markers ---
 L.marker([BUSINESS.lat, BUSINESS.lng])
   .addTo(map)
   .bindPopup("<b>Flavour Food Bites</b><br>Colis Street, Tabunok Market, Talisay, Cebu")
   .openPopup();
 
-// Motorcycle marker
 const motorcycleMarker = L.marker([BUSINESS.lat, BUSINESS.lng], {
   icon: L.divIcon({
     html: '🏍️',
@@ -53,7 +63,6 @@ const motorcycleMarker = L.marker([BUSINESS.lat, BUSINESS.lng], {
   })
 }).addTo(map);
 
-// Delivery marker
 L.marker([DELIVERY.lat, DELIVERY.lng], { title: "Your Location" })
   .addTo(map)
   .bindPopup("<b>Delivery Location</b>")
@@ -61,7 +70,43 @@ L.marker([DELIVERY.lat, DELIVERY.lng], { title: "Your Location" })
 
 let routeLine, routeLatLngs = [];
 
-// Fetch route from OpenRouteService
+// --- Toast Notification ---
+function showToast(message, color = '#FF6B35') {
+  const toast = document.createElement('div');
+  toast.textContent = message;
+  Object.assign(toast.style, {
+    position: 'fixed',
+    bottom: '30px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    background: color,
+    color: '#fff',
+    padding: '12px 20px',
+    borderRadius: '10px',
+    fontWeight: '600',
+    fontSize: '15px',
+    zIndex: '9999',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+    opacity: '0',
+    transition: 'opacity 0.4s ease, bottom 0.4s ease'
+  });
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => {
+    toast.style.opacity = '1';
+    toast.style.bottom = '50px';
+  });
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.bottom = '30px';
+    setTimeout(() => toast.remove(), 500);
+  }, 3500);
+}
+
+// --- Sound setup ---
+const sound = new Audio('https://cdn.pixabay.com/audio/2023/03/16/audio_61a1a6e81d.mp3');
+sound.volume = 1.0;
+
+// --- Fetch Route ---
 function fetchRoute(callback) {
   const url = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${ORS_API_KEY}&start=${BUSINESS.lng},${BUSINESS.lat}&end=${DELIVERY.lng},${DELIVERY.lat}`;
   fetch(url)
@@ -74,78 +119,80 @@ function fetchRoute(callback) {
     .catch(err => console.error('Error fetching route:', err));
 }
 
-// Draw route on map
+// --- Draw Route ---
 function drawRoute(latlngs) {
-  if(routeLine) routeLine.remove();
-  routeLine = L.polyline(latlngs, { color:'red', weight:5 }).addTo(map);
-  map.fitBounds(routeLine.getBounds(), { padding:[50,50] });
+  if (routeLine) routeLine.remove();
+  routeLine = L.polyline(latlngs, { color: 'red', weight: 5 }).addTo(map);
+  map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
 }
 
-// Smooth animation along route
-function animateAlongRoute(marker, latlngs, speed=0.002) {
-  if(!latlngs || latlngs.length < 2) return;
-
-  let i = 0;
-  let progress = 0;
-
+// --- Animate Marker ---
+function animateAlongRoute(marker, latlngs, speed = 0.002) {
+  if (!latlngs || latlngs.length < 2) return;
+  let i = 0, progress = 0;
   function move() {
-    if(i >= latlngs.length - 1) return;
-
+    if (i >= latlngs.length - 1) return;
     const [lat1, lng1] = latlngs[i];
-    const [lat2, lng2] = latlngs[i+1];
-
-    const deltaLat = lat2 - lat1;
-    const deltaLng = lng2 - lng1;
-
+    const [lat2, lng2] = latlngs[i + 1];
     progress += speed;
-    if(progress >= 1){
-      progress = 0;
-      i++;
-    }
-
-    const lat = lat1 + deltaLat * progress;
-    const lng = lng1 + deltaLng * progress;
-    marker.setLatLng([lat,lng]);
-
+    if (progress >= 1) { progress = 0; i++; }
+    const lat = lat1 + (lat2 - lat1) * progress;
+    const lng = lng1 + (lng2 - lng1) * progress;
+    marker.setLatLng([lat, lng]);
     requestAnimationFrame(move);
   }
-
   move();
 }
 
-// Initialize map and animation
+// --- Handle Status ---
+function handleStatus(status) {
+  if (!status) return;
+  console.log("Status:", status);
+  switch (status) {
+    case 'pending':
+      showToast("🕓 Your order is pending confirmation.", "#888");
+      motorcycleMarker.setLatLng([BUSINESS.lat, BUSINESS.lng]);
+      break;
+    case 'preparing':
+      showToast("👨‍🍳 Your order is being prepared.", "#FFA500");
+      sound.play();
+      motorcycleMarker.setLatLng([BUSINESS.lat, BUSINESS.lng]);
+      break;
+    case 'on_the_way':
+      showToast("🚴 Your order is on the way!", "#FF6B35");
+      sound.play();
+      animateAlongRoute(motorcycleMarker, routeLatLngs, 0.003);
+      break;
+    case 'delivered':
+      showToast("✅ Your order has been delivered!", "#28A745");
+      sound.play();
+      motorcycleMarker.setLatLng([DELIVERY.lat, DELIVERY.lng]);
+      break;
+    default:
+      console.log("Unknown status:", status);
+  }
+}
+
+// --- Initialize map & route ---
 fetchRoute(latlngs => {
   drawRoute(latlngs);
-
   const activeDelivery = localStorage.getItem('activeDelivery');
-
-  if(activeDelivery === "on_the_way") {
-    animateAlongRoute(motorcycleMarker, latlngs, 0.003);
-  }
-
-  if(activeDelivery === "delivered") {
-    motorcycleMarker.setLatLng([DELIVERY.lat, DELIVERY.lng]);
-  }
+  if (activeDelivery) handleStatus(activeDelivery);
 });
 
-// Listen for admin updates
-window.addEventListener('storage', (e)=>{
-  if(e.key === 'activeDelivery'){
-    const status = e.newValue;
-
-    if(status==='on_the_way') {
-      animateAlongRoute(motorcycleMarker, routeLatLngs, 0.003);
-    }
-
-    if(status==='delivered') {
-      motorcycleMarker.setLatLng([DELIVERY.lat, DELIVERY.lng]);
-    }
-
-    if(status==='false') {
-      motorcycleMarker.setLatLng([BUSINESS.lat, BUSINESS.lng]);
-    }
-  }
+// --- Detect changes from other tabs ---
+window.addEventListener('storage', e => {
+  if (e.key === 'activeDelivery') handleStatus(e.newValue);
 });
+
+// --- Detect same-tab changes (fix for same browser bar) ---
+setInterval(() => {
+  const current = localStorage.getItem('activeDelivery');
+  if (current !== window.lastStatus) {
+    window.lastStatus = current;
+    handleStatus(current);
+  }
+}, 2000);
 </script>
 
 </body>

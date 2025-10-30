@@ -15,11 +15,13 @@ body {
   background:#0F0F23;color:#fff;
   display:flex;height:100vh;overflow:hidden;
 }
+
 /* Sidebar */
 .sidebar {
   width:260px;background:#1a1a3a;padding:2rem 1rem;
   display:flex;flex-direction:column;align-items:center;
   position:fixed;height:100%;box-shadow:2px 0 15px rgba(0,0,0,0.2);
+  z-index:2;
 }
 .sidebar img {width:80px;height:80px;border-radius:50%;object-fit:cover;margin-bottom:0.5rem;}
 .sidebar h2 {font-size:1.3rem;color:#FF6B35;}
@@ -32,6 +34,7 @@ body {
   border-radius:10px;transition:0.3s;
 }
 .sidebar a.active,.sidebar a:hover {background:#FF6B35;font-weight:600;}
+
 /* Main */
 main {
   flex:1;margin-left:260px;padding:2rem;
@@ -39,7 +42,8 @@ main {
 }
 header {
   background:#1a1a3a;border-radius:12px;padding:1rem 1.5rem;margin-bottom:1rem;
-  box-shadow:0 4px 10px rgba(0,0,0,0.3);display:flex;justify-content:space-between;align-items:center;
+  box-shadow:0 4px 10px rgba(0,0,0,0.3);
+  display:flex;justify-content:space-between;align-items:center;
 }
 header h1 {font-size:1.5rem;}
 .refresh-indicator {
@@ -47,15 +51,19 @@ header h1 {font-size:1.5rem;}
   border-radius:10px;font-size:0.9rem;animation:pulse 2s infinite;
 }
 @keyframes pulse {0%,100%{opacity:0.6;}50%{opacity:1;}}
+
+/* Sections */
 section {margin-bottom:2rem;}
 h2 {
   font-size:1.3rem;color:#FF6B35;border-bottom:3px solid #FF8C69;
   display:inline-block;padding-bottom:0.3rem;margin-bottom:1rem;
 }
+
 /* Cards */
 .card {
   background:#1a1a3a;border-radius:20px;padding:1rem;margin-bottom:1rem;
-  box-shadow:0 10px 25px rgba(255,107,53,0.3);transition:transform 0.2s;
+  box-shadow:0 10px 25px rgba(255,107,53,0.3);
+  transition:transform 0.2s;
 }
 .card:hover {transform:scale(1.02);}
 .card h3 {color:#FF6B35;margin-bottom:0.2rem;}
@@ -67,17 +75,25 @@ h2 {
 .card .contact-btn:hover {background:#666;}
 .card .remove-btn {background:#FF6B35;color:#fff;float:right;}
 .card .remove-btn:hover {background:#ff8450;}
-/* Floating Chat Box */
+
+/* Chat Popup */
 .chat-popup {
   position:fixed;bottom:20px;right:20px;width:320px;height:420px;background:#1a1a3a;
   border-radius:16px;box-shadow:0 10px 25px rgba(0,0,0,0.5);
-  display:none;flex-direction:column;overflow:hidden;z-index:10000;
+  display:none;flex-direction:column;overflow:hidden;
+  z-index:10000;pointer-events:none;
+}
+.chat-popup.active {
+  display:flex;pointer-events:auto;
 }
 .chat-popup header {
-  background:#FF6B35;padding:0.8rem;display:flex;justify-content:space-between;align-items:center;color:#fff;
+  background:#FF6B35;padding:0.8rem;display:flex;
+  justify-content:space-between;align-items:center;color:#fff;
 }
 .chat-popup header h3 {font-size:1rem;}
-.chat-popup header button {background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;}
+.chat-popup header button {
+  background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;
+}
 .chat-container {flex:1;padding:10px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;}
 .chat-message {
   padding:8px 12px;border-radius:12px;max-width:80%;font-size:0.95rem;
@@ -93,18 +109,26 @@ h2 {
   padding:8px 12px;border:none;border-radius:12px;background:#FF6B35;color:#fff;cursor:pointer;
 }
 .chat-input button:hover {background:#ff8256;}
+
 /* Notification */
 #notification {
   position:fixed;top:20px;right:20px;background:#FF6B35;color:#fff;
-  padding:12px 16px;border-radius:8px;display:none;box-shadow:0 4px 10px rgba(0,0,0,0.3);
+  padding:12px 16px;border-radius:8px;display:none;
+  box-shadow:0 4px 10px rgba(0,0,0,0.3);
   z-index:9999;animation:slideIn 0.3s ease-out;
+  pointer-events:none;
 }
-@keyframes slideIn {from{transform:translateY(-10px);opacity:0;}to{transform:translateY(0);opacity:1;}}
-/* Collapsible Reviews */
+@keyframes slideIn {
+  from{transform:translateY(-10px);opacity:0;}
+  to{transform:translateY(0);opacity:1;}
+}
+
+/* Reviews */
 .reviews-header {cursor:pointer;display:flex;align-items:center;gap:8px;color:#FF6B35;user-select:none;}
 .reviews-header i {transition:transform 0.3s;}
 .reviews-header.active i {transform:rotate(180deg);}
 #reviewsContainer {display:none;flex-direction:column;gap:10px;margin-top:10px;}
+
 /* Responsive */
 @media(max-width:768px){
   .chat-popup {width:90%;right:5%;bottom:10px;}
@@ -123,10 +147,10 @@ h2 {
   <p>Administrator</p>
   <ul>
     <li><a href="#" class="active"><i class="ri-dashboard-line"></i> Dashboard</a></li>
-    <li><a href="#"><i class="ri-shopping-bag-3-line"></i> Orders</a></li>
-    <li><a href="#"><i class="ri-archive-2-line"></i> Inventory</a></li>
-    <li><a href="#"><i class="ri-truck-line"></i> Suppliers</a></li>
-    <li><a href="#"><i class="ri-bar-chart-2-line"></i> Reports</a></li>
+    <li><a href="adminorder.html"><i class="ri-shopping-bag-3-line"></i> Orders</a></li>
+    <li><a href="inventory.html"><i class="ri-archive-2-line"></i> Inventory</a></li>
+    <li><a href="suppliers.html"><i class="ri-truck-line"></i> Suppliers</a></li>
+    <li><a href="reports.html"><i class="ri-bar-chart-2-line"></i> Reports</a></li>
     <li><a href="#" id="logoutLink"><i class="ri-logout-circle-line"></i> Logout</a></li>
   </ul>
 </aside>
@@ -211,7 +235,7 @@ function renderTickets(){
     activeTicketId=b.dataset.id;
     const t=tickets.find(x=>x.id==activeTicketId);
     el.chatTitle.textContent=`Chat — ${t.name}`;
-    el.chatPopup.style.display='flex';
+    el.chatPopup.classList.add('active');
     renderChat();
   });
 
@@ -234,7 +258,6 @@ function renderChat(){
     el.chatBox.appendChild(div);
   });
 
-  // ✅ Show review when chat ends
   const status=localStorage.getItem('chat_status_'+activeTicketId);
   if(status==='ended'){
     const reviewKey='chat_review_'+activeTicketId;
@@ -255,7 +278,6 @@ function renderChat(){
       el.chatBox.appendChild(reviewDiv);
     }
   }
-
   el.chatBox.scrollTop=el.chatBox.scrollHeight;
 }
 
@@ -272,7 +294,7 @@ el.sendBtn.onclick=()=>{
 };
 
 document.getElementById('closeChat').onclick=()=>{
-  el.chatPopup.style.display='none';
+  el.chatPopup.classList.remove('active');
   activeTicketId=null;
 };
 
@@ -301,7 +323,7 @@ function renderReviews(){
   });
 }
 
-// ✅ Live sync between tabs
+// Live sync
 window.addEventListener('storage',(e)=>{
   if(e.key?.startsWith('chat_status_')){
     const id=e.key.replace('chat_status_','');
@@ -312,12 +334,11 @@ window.addEventListener('storage',(e)=>{
       renderReviews();
     }
   }
-  if(e.key?.startsWith('live_chat_')&&e.key==='live_chat_'+activeTicketId){
-    renderChat();
-  }
+  if(e.key==='live_chat_'+activeTicketId) renderChat();
   if(e.key?.startsWith('chat_review_')) renderReviews();
 });
 
+// Auto-refresh
 setInterval(()=>{
   tickets=JSON.parse(localStorage.getItem('tickets'))||[];
   renderTickets();
@@ -327,5 +348,9 @@ setInterval(()=>{
 renderTickets();
 renderReviews();
 </script>
+
+<!-- 🔔 Global Order Notifications -->
+<script src="admin-notify.js"></script>
+
 </body>
 </html>

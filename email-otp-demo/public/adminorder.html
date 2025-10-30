@@ -10,106 +10,99 @@
 <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
 
 <style>
-* { box-sizing: border-box; margin:0; padding:0; }
-body {
-  font-family: 'Poppins', sans-serif;
-  background:#0F0F23; color:#fff; 
-  display:flex; height:100vh; overflow:hidden; 
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Poppins',sans-serif;background:#0F0F23;color:#fff;
+  display:flex;height:100vh;overflow:hidden;
 }
 
 /* Sidebar */
-.sidebar {
-  width:260px; background:#1a1a3a; padding:2rem 1rem;
-  display:flex; flex-direction:column; align-items:center; box-shadow:2px 0 15px rgba(0,0,0,0.2);
-  position:fixed; height:100%;
+.sidebar{
+  width:260px;background:#1a1a3a;padding:2rem 1rem;
+  display:flex;flex-direction:column;align-items:center;
+  box-shadow:2px 0 15px rgba(0,0,0,0.2);position:fixed;height:100%;
 }
-.sidebar img { width:80px; height:80px; border-radius:50%; object-fit:cover; }
-.sidebar h2 { margin-top:0.5rem; font-size:1.3rem; color:#FF6B35; }
-.sidebar p { font-size:0.9rem; color:#aaa; margin-bottom:2rem; }
-.sidebar .nav { list-style:none; width:100%; }
-.sidebar .nav li { margin:0.3rem 0; }
-.sidebar .nav a {
-  display:flex; align-items:center;
-  text-decoration:none; color:#fff; 
-  padding:0.7rem 1rem; border-radius:10px;
-  transition:all 0.3s ease;
+.sidebar img{width:80px;height:80px;border-radius:50%;object-fit:cover;}
+.sidebar h2{margin-top:.5rem;font-size:1.3rem;color:#FF6B35;}
+.sidebar p{font-size:.9rem;color:#aaa;margin-bottom:2rem;}
+.sidebar .nav{list-style:none;width:100%;}
+.sidebar .nav li{margin:.3rem 0;}
+.sidebar .nav a{
+  display:flex;align-items:center;text-decoration:none;color:#fff;
+  padding:.7rem 1rem;border-radius:10px;transition:all .3s ease;
 }
-.sidebar .nav a i { margin-right:10px; font-size:1.2rem; }
-.sidebar .nav a.active, .sidebar .nav a:hover {
-  background:#FF6B35; color:#fff; font-weight:600;
+.sidebar .nav a i{margin-right:10px;font-size:1.2rem;}
+.sidebar .nav a.active,.sidebar .nav a:hover{
+  background:#FF6B35;color:#fff;font-weight:600;
 }
 
 /* Main */
-main {
-  flex:1; margin-left:260px; padding:2rem; overflow-y:auto;
+main{flex:1;margin-left:260px;padding:2rem;overflow-y:auto;}
+header{
+  background:#1a1a3a;color:#fff;padding:1rem 1.5rem;
+  border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.3);
+  margin-bottom:2rem;display:flex;justify-content:space-between;align-items:center;
 }
-header {
-  background:#1a1a3a; color:#fff; padding:1rem 1.5rem;
-  border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.3);
-  margin-bottom:2rem; display:flex; justify-content:space-between; align-items:center;
+header h1{font-size:1.5rem;}
+.refresh-indicator{
+  font-size:.9rem;background:rgba(255,255,255,0.2);
+  padding:.4rem .8rem;border-radius:10px;animation:pulse 2s infinite;
 }
-header h1 { font-size:1.5rem; }
-.refresh-indicator {
-  font-size:0.9rem; background: rgba(255,255,255,0.2);
-  padding:0.4rem 0.8rem; border-radius:10px; animation:pulse 2s infinite;
-}
-@keyframes pulse { 0%,100%{opacity:0.6;} 50%{opacity:1;} }
+@keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}
 
 /* Cards */
-.card {
-  border-radius:20px; padding:1.2rem; margin-bottom:1.5rem; 
-  background:#1a1a3a; box-shadow:0 10px 25px rgba(255, 107, 53,0.3);
-  transition:0.3s; display:flex; gap:1rem; flex-direction:column; position:relative;
+.card{
+  border-radius:20px;padding:1.2rem;margin-bottom:1.5rem;
+  background:#1a1a3a;box-shadow:0 10px 25px rgba(255,107,53,0.3);
+  transition:.3s;display:flex;gap:1rem;flex-direction:column;position:relative;
 }
-.card:hover { transform:translateY(-4px); box-shadow:0 15px 35px rgba(255,107,53,0.5); }
-.card img { width:60px; height:60px; border-radius:6px; object-fit:cover; cursor:pointer; }
-.card h3 { margin-bottom:0.5rem; font-weight:700; color:#FF6B35; }
-.card p { margin-bottom:0.3rem; }
-.card select { margin-top:5px; padding:4px 6px; border-radius:6px; border:none; background:#0F0F23; color:#fff; }
-.card button {
-  margin-top:5px; padding:6px 10px;
-  background:#FF6B35; border:none; color:#fff; border-radius:6px; cursor:pointer;
-  transition:0.3s;
+.card:hover{transform:translateY(-4px);box-shadow:0 15px 35px rgba(255,107,53,0.5);}
+.card img{width:60px;height:60px;border-radius:6px;object-fit:cover;cursor:pointer;}
+.card h3{margin-bottom:.5rem;font-weight:700;color:#FF6B35;}
+.card p{margin-bottom:.3rem;}
+.card select{
+  margin-top:5px;padding:4px 6px;border-radius:6px;border:none;
+  background:#0F0F23;color:#fff;
 }
-.card button:hover { background:#ff855c; }
+.card button{
+  margin-top:5px;padding:6px 10px;background:#FF6B35;border:none;
+  color:#fff;border-radius:6px;cursor:pointer;transition:.3s;
+}
+.card button:hover{background:#ff855c;}
 
-/* Toast Notification */
-.toast {
-  position:fixed; top:20px; right:20px;
-  background:#E74C3C; color:#fff;
-  padding:1rem 1.5rem; border-radius:12px;
-  box-shadow:0 5px 20px rgba(231,76,60,0.5);
-  opacity:0; transform:translateY(-20px);
-  transition:all 0.4s ease; z-index:9999;
+/* Toast */
+.toast{
+  position:fixed;top:20px;right:20px;background:#E74C3C;color:#fff;
+  padding:1rem 1.5rem;border-radius:12px;box-shadow:0 5px 20px rgba(231,76,60,0.5);
+  opacity:0;transform:translateY(-20px);transition:all .4s ease;z-index:9999;
 }
-.toast.show { opacity:1; transform:translateY(0); }
+.toast.show{opacity:1;transform:translateY(0);}
 
-/* Status colors */
-.status-pending { background-color: #2a2a40; }
-.status-inprogress { background-color: #2a3a5a; }
-.status-delivered { background-color: #3a5a3a; }
-.status-cancelled { background-color: #5a2a2a; }
+/* Status */
+.status-pending{background-color:#2a2a40;}
+.status-inprogress{background-color:#2a3a5a;}
+.status-delivered{background-color:#3a5a3a;}
+.status-cancelled{background-color:#5a2a2a;}
 
-/* Blink Animation for Cancelled Orders */
-.blink {
-  animation: blinkEffect 1s ease-in-out 3;
-}
-@keyframes blinkEffect {
-  0%, 100% { box-shadow: 0 0 20px 5px red; }
-  50% { box-shadow: 0 0 40px 10px red; }
+/* Blink Animation */
+.blink{animation:blinkEffect 1s ease-in-out 3;}
+@keyframes blinkEffect{
+  0%,100%{box-shadow:0 0 20px 5px red;}
+  50%{box-shadow:0 0 40px 10px red;}
 }
 
-#lightbox {
-  display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-  background: rgba(0,0,0,0.85); justify-content:center; align-items:center; z-index:9998;
+/* Lightbox */
+#lightbox{
+  display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.85);justify-content:center;align-items:center;z-index:9998;
 }
-#lightbox img { max-width:90%; max-height:90%; border-radius:12px; }
+#lightbox img{max-width:90%;max-height:90%;border-radius:12px;}
 
 @media(max-width:768px){
   body{flex-direction:column;}
-  .sidebar{width:100%; flex-direction:row; justify-content:space-around; padding:1rem;}
-  main{margin-left:0; padding:1rem;}
-  .card{align-items:center; text-align:center;}
+  .sidebar{width:100%;flex-direction:row;justify-content:space-around;padding:1rem;}
+  main{margin-left:0;padding:1rem;}
+  .card{align-items:center;text-align:center;}
 }
 </style>
 </head>
@@ -134,162 +127,159 @@ header h1 { font-size:1.5rem; }
     <h1>Orders</h1>
     <span class="refresh-indicator">Live updates 🔄</span>
   </header>
-
   <div id="ordersContainer"></div>
 </main>
 
 <div id="lightbox"><img src="" alt="Attachment"></div>
-<div id="toast" class="toast">A customer cancelled an order ❗</div>
+<div id="toast" class="toast"></div>
+
+<!-- 🔊 Sounds -->
+<audio id="soundNew" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_13e7d1e8db.mp3?filename=notification-1-126505.mp3" preload="auto"></audio>
+<audio id="soundCancel" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7f0e20f7a3.mp3?filename=error-126627.mp3" preload="auto"></audio>
 
 <script>
-const ordersContainer = document.getElementById('ordersContainer');
-const lightbox = document.getElementById('lightbox');
-const lightboxImg = lightbox.querySelector('img');
-const toast = document.getElementById('toast');
+const ordersContainer=document.getElementById('ordersContainer');
+const lightbox=document.getElementById('lightbox');
+const lightboxImg=lightbox.querySelector('img');
+const toast=document.getElementById('toast');
+const soundNew=document.getElementById('soundNew');
+const soundCancel=document.getElementById('soundCancel');
 
-let orders = JSON.parse(localStorage.getItem('orders')) || [];
-let lastOrdersJSON = JSON.stringify(orders);
-let notifiedCancelledIds = new Set();
+soundNew.volume=1.0;
+soundCancel.volume=1.0;
 
-function showToast(message){
-  toast.textContent = message;
+let orders=JSON.parse(localStorage.getItem('orders'))||[];
+let lastOrdersJSON=JSON.stringify(orders);
+let notifiedCancelledIds=new Set();
+let knownOrderIds=new Set(orders.map(o=>o.id));
+
+function showToast(msg,color="#E74C3C"){
+  toast.textContent=msg;
+  toast.style.background=color;
   toast.classList.add('show');
-  setTimeout(()=>toast.classList.remove('show'), 3000);
+  setTimeout(()=>toast.classList.remove('show'),3000);
 }
 
-function getStatusClass(status){
-  switch(status.toLowerCase()){
-    case 'pending': return 'status-pending';
-    case 'preparing': case 'on_the_way': return 'status-inprogress';
-    case 'delivered': return 'status-delivered';
-    case 'cancelled': case 'rejected': return 'status-cancelled';
-    default: return 'status-pending';
-  }
+function getStatusClass(s){
+  s=s.toLowerCase();
+  if(s==="pending")return"status-pending";
+  if(["preparing","on_the_way"].includes(s))return"status-inprogress";
+  if(s==="delivered")return"status-delivered";
+  if(["cancelled","rejected"].includes(s))return"status-cancelled";
+  return"status-pending";
 }
 
 function renderOrders(){
-  ordersContainer.innerHTML='';
-  if(orders.length===0){ 
-    ordersContainer.innerHTML='<p>No orders yet.</p>'; 
-    return; 
-  }
-
-  orders.forEach((order,index)=>{
-    const itemsStr = order.items.map(i=>`${i.name} x${i.qty}`).join(', ');
-    const imagesHTML = order.receipts?.map((img,idx)=>`<img src="${img}" data-index="${idx}">`).join('')||'';
-
-    const box = document.createElement('div');
-    box.className = `card ${getStatusClass(order.status)}`;
-    box.dataset.id = order.id || index;
-
-    box.innerHTML = `
-      <h3>Order #${order.id || index} — ${order.customerName}</h3>
-      <p>Contact: ${order.customerContact}</p>
-      <p>Items: ${itemsStr}</p>
-      <p>Total: ₱${order.total.toFixed(2)}</p>
-      <div>Receipts: ${imagesHTML}</div>
+  ordersContainer.innerHTML=orders.length?"" : "<p>No orders yet.</p>";
+  orders.forEach((o,i)=>{
+    const items=o.items.map(it=>`${it.name} x${it.qty}`).join(', ');
+    const imgs=o.receipts?.map((img,idx)=>`<img src="${img}" data-index="${idx}">`).join('')||'';
+    const div=document.createElement('div');
+    div.className=`card ${getStatusClass(o.status)}`;
+    div.dataset.id=o.id||i;
+    div.innerHTML=`
+      <h3>Order #${o.id||i} — ${o.customerName}</h3>
+      <p>Contact: ${o.customerContact}</p>
+      <p>Items: ${items}</p>
+      <p>Total: ₱${o.total.toFixed(2)}</p>
+      <div>Receipts: ${imgs}</div>
       <p>Status: 
-        <select data-index="${index}">
-          <option value="pending" ${order.status==='pending'?'selected':''}>Pending</option>
-          <option value="preparing" ${order.status==='preparing'?'selected':''}>Preparing</option>
-          <option value="on_the_way" ${order.status==='on_the_way'?'selected':''}>On The Way</option>
-          <option value="delivered" ${order.status==='delivered'?'selected':''}>Delivered</option>
-          <option value="cancelled" ${order.status==='cancelled'?'selected':''}>Cancelled</option>
+        <select data-index="${i}">
+          <option value="pending" ${o.status==='pending'?'selected':''}>Pending</option>
+          <option value="preparing" ${o.status==='preparing'?'selected':''}>Preparing</option>
+          <option value="on_the_way" ${o.status==='on_the_way'?'selected':''}>On The Way</option>
+          <option value="delivered" ${o.status==='delivered'?'selected':''}>Delivered</option>
+          <option value="cancelled" ${o.status==='cancelled'?'selected':''}>Cancelled</option>
         </select>
       </p>
-      <button class="remove-btn" data-index="${index}"><i class="ri-delete-bin-6-line"></i> Remove</button>
-    `;
-    ordersContainer.appendChild(box);
+      <button class="remove-btn" data-index="${i}"><i class="ri-delete-bin-6-line"></i> Remove</button>`;
+    ordersContainer.appendChild(div);
   });
 
-// handle status change + send Gmail notification
-ordersContainer.querySelectorAll('select').forEach(sel=>{
-  sel.addEventListener('change', async e=>{
-    const idx = e.target.dataset.index;
-    const order = orders[idx];
-    const newStatus = e.target.value;
-
-    order.status = newStatus;
-    localStorage.setItem('orders', JSON.stringify(orders));
-    renderOrders();
-
-// 🔔 Send email notification through backend
-try {
-  await fetch('/notify-status', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      email: order.customerEmail, // customer's Gmail
-      name: order.customerName,   // customer's name
-      orderId: order.id,          // order number
-      status: newStatus           // new order status
-    })
+  ordersContainer.querySelectorAll('select').forEach(sel=>{
+    sel.addEventListener('change',e=>{
+      const i=e.target.dataset.index,order=orders[i],s=e.target.value;
+      order.status=s;
+      localStorage.setItem('orders',JSON.stringify(orders));
+      if(s==="on_the_way")localStorage.setItem('activeDelivery','on_the_way');
+      else if(s==="delivered")localStorage.setItem('activeDelivery','delivered');
+      else localStorage.setItem('activeDelivery','false');
+      localStorage.setItem('orders_update_time',Date.now().toString());
+      renderOrders();
+    });
   });
-  console.log(`✅ Email sent for Order #${order.id}`);
-} catch (err) {
-  console.error('❌ Failed to send email:', err);
-}
-  });
-});
 
-  // handle remove button
   ordersContainer.querySelectorAll('.remove-btn').forEach(btn=>{
     btn.addEventListener('click',e=>{
-      const idx = e.target.closest('button').dataset.index;
+      const i=e.target.closest('button').dataset.index;
       if(confirm('Remove this order?')){
-        orders.splice(idx,1);
-        localStorage.setItem('orders', JSON.stringify(orders));
+        orders.splice(i,1);
+        localStorage.setItem('orders',JSON.stringify(orders));
+        localStorage.setItem('orders_update_time',Date.now().toString());
         renderOrders();
       }
     });
   });
 
-  // image click lightbox
   ordersContainer.querySelectorAll('img').forEach(img=>{
-    img.addEventListener('click',e=>{
-      lightboxImg.src = e.target.src;
-      lightbox.style.display='flex';
-    });
+    img.addEventListener('click',()=>{lightboxImg.src=img.src;lightbox.style.display='flex';});
   });
 }
 
-lightbox.addEventListener('click',()=>{ lightbox.style.display='none'; });
+lightbox.addEventListener('click',()=>lightbox.style.display='none');
 
-function highlightCancelled(orderId){
-  const el = document.querySelector(`.card[data-id="${orderId}"]`);
-  if(el){
-    el.classList.add('blink');
-    setTimeout(()=>el.classList.remove('blink'), 3000);
-  }
+function highlightNewOrder(id){
+  const el=document.querySelector(`.card[data-id="${id}"]`);
+  if(el){el.style.boxShadow='0 0 25px 10px #27ae60';setTimeout(()=>el.style.boxShadow='',3000);}
+}
+function highlightCancelled(id){
+  const el=document.querySelector(`.card[data-id="${id}"]`);
+  if(el){el.classList.add('blink');setTimeout(()=>el.classList.remove('blink'),3000);}
 }
 
 function liveUpdate(){
-  const currentOrders = JSON.parse(localStorage.getItem('orders'))||[];
-
-  currentOrders.forEach(order=>{
-    if(order.status === 'cancelled' && !notifiedCancelledIds.has(order.id)){
-      showToast(`Customer cancelled Order #${order.id || 'unknown'}`);
-      highlightCancelled(order.id);
-      notifiedCancelledIds.add(order.id);
+  const current=JSON.parse(localStorage.getItem('orders'))||[];
+  current.forEach(o=>{
+    if(o.status==='cancelled'&&!notifiedCancelledIds.has(o.id)){
+      showToast(`❗ Customer cancelled Order #${o.id}`,"#E74C3C");
+      highlightCancelled(o.id);
+      soundCancel.currentTime=0;
+      soundCancel.play().catch(()=>{});
+      notifiedCancelledIds.add(o.id);
     }
   });
-
-  if(JSON.stringify(currentOrders)!==lastOrdersJSON){ 
-    orders=currentOrders; 
-    lastOrdersJSON=JSON.stringify(orders); 
-    renderOrders(); 
+  current.forEach(o=>{
+    if(!knownOrderIds.has(o.id)){
+      showToast(`🛎️ New Order Received — #${o.id}`,"#27AE60");
+      highlightNewOrder(o.id);
+      soundNew.currentTime=0;
+      soundNew.play().catch(()=>{});
+      knownOrderIds.add(o.id);
+    }
+  });
+  if(JSON.stringify(current)!==lastOrdersJSON){
+    orders=current;lastOrdersJSON=JSON.stringify(orders);renderOrders();
   }
 }
+
+window.addEventListener('storage',e=>{
+  if(e.key==='orders_update_time'||e.key==='orders')liveUpdate();
+});
+
+// 🔓 unlock sound
+document.addEventListener('click',()=>{
+  soundNew.play().catch(()=>{});
+  soundCancel.play().catch(()=>{});
+  soundNew.pause();soundCancel.pause();
+  soundNew.currentTime=0;soundCancel.currentTime=0;
+},{once:true});
 
 setInterval(liveUpdate,1000);
 renderOrders();
 
 document.getElementById('logoutLink').addEventListener('click',e=>{
-  e.preventDefault(); 
-  localStorage.clear(); 
-  window.location.href='login.html';
+  e.preventDefault();localStorage.clear();window.location.href='login.html';
 });
 </script>
-
 </body>
 </html>
